@@ -54,7 +54,7 @@ public class Application implements CommandLineRunner{
                 .retrieve().bodyToMono(String.class).block();
 
         System.out.println(response);
-        System.out.println(APK.getApiKey());
+        System.out.println(APK.getApiKey()); //한번 주석을 달아볼게
         
     }
     
