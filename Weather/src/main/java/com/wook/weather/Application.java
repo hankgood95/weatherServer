@@ -88,7 +88,7 @@ public class Application implements CommandLineRunner{
             if(it.getCategory().equals("TMX")) {
             	System.out.println(it.toString()); //최고 기온의 Item 객체 출력
             	count++; //count++ 해서 최고 기온 체크 표시
-            	//뭐임ㅋㅋ 어이 없네
+            	//엥
             }	
         }
         boolean check = false;
