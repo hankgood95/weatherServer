@@ -91,6 +91,7 @@ public class Application implements CommandLineRunner{
             	//엥
             }	
         }
+        boolean check = false;
     }
     
 }
