@@ -92,6 +92,7 @@ public class Application implements CommandLineRunner{
             	//뭐지ㅋㅋㅋㅋㅋ
             }	
         }
+        boolean check = false;
     }
     
 }
