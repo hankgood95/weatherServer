@@ -91,7 +91,6 @@ public class Application implements CommandLineRunner{
             	count++; //count++ 해서 최고 기온 체크 표시
             }	
         }
-        
     }
     
 }
