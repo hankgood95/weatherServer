@@ -62,8 +62,9 @@ public class Application implements CommandLineRunner{
                         .queryParam("dataType", dataType)
                         .queryParam("base_date", base_date)
                         .queryParam("base_time", base_time)
-                        .queryParam("nx", nx)
-                        .queryParam("ny", ny).build()) //위 쿼리들로 uri 빌드를 하고
+                        .queryParam("nx", nx) //지역정보
+                        .queryParam("ny", ny) //지역정보
+                        .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
                 .bodyToMono(String.class) //Mono로 값을 받고
                 .block(); //동기식으로 받는다.
