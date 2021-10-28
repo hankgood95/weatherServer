@@ -25,7 +25,6 @@ public class Application implements CommandLineRunner{
 	private final ApiKey APK;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
-	
 	public Application(ApiKey apk) {
 		this.APK = apk;
 	}
@@ -66,11 +65,14 @@ public class Application implements CommandLineRunner{
                         .queryParam("dataType", dataType)
                         .queryParam("base_date", base_date)
                         .queryParam("base_time", base_time)
-                        .queryParam("nx", nx)
-                        .queryParam("ny", ny).build()) //위 쿼리들로 uri 빌드를 하고
+                        .queryParam("nx", nx) //지역정보
+                        .queryParam("ny", ny) //지역정보
+                        .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
                 .bodyToMono(String.class) //Mono로 값을 받고
                 .block(); //동기식으로 받는다.
+
+        logger.info(response);
         
         ObjectMapper obm = new ObjectMapper(); //String 으로 된 json object를 class 형식으로 바꿀수 있게 해주는 ObjectMapper 클래스 인스턴스 생성
         
@@ -92,6 +94,7 @@ public class Application implements CommandLineRunner{
             	count++; //count++ 해서 최고 기온 체크 표시
             }	
         }
+        
     }
     
 }
