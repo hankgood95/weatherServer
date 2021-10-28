@@ -3,6 +3,8 @@ package com.wook.weather;
 import java.time.Duration;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +24,8 @@ public class Application implements CommandLineRunner{
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
 	
+	private Logger logger = LoggerFactory.getLogger(Application.class);
+	
 	public Application(ApiKey apk) {
 		this.APK = apk;
 	}
@@ -37,7 +41,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211025";
+        String base_date = "20211026";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
@@ -69,7 +73,7 @@ public class Application implements CommandLineRunner{
                 .bodyToMono(String.class) //Mono로 값을 받고
                 .block(); //동기식으로 받는다.
 
-        System.out.println(response);
+        logger.info(response);
         
         ObjectMapper obm = new ObjectMapper(); //String 으로 된 json object를 class 형식으로 바꿀수 있게 해주는 ObjectMapper 클래스 인스턴스 생성
         
@@ -83,15 +87,15 @@ public class Application implements CommandLineRunner{
         		break;
         	}
             if(it.getCategory().equals("TMN")){
-            	System.out.println(it.toString()); //최저기온의 Item 객체 출력
+            	logger.info(it.toString());
             	count++; //count++ 해서 최저 기온 체크 표시
             }
             if(it.getCategory().equals("TMX")) {
-            	System.out.println(it.toString()); //최고 기온의 Item 객체 출력
+            	logger.info(it.toString());
             	count++; //count++ 해서 최고 기온 체크 표시
             }	
         }
-        //충돌났을삘인대
+        
     }
     
 }
