@@ -96,6 +96,7 @@ public class Application implements CommandLineRunner{
         }
         
         //그램에서 브랜치 생성후 커밋한다.
+        //이건 컴터 본체에서 커밋한다.
     }
     
 }
