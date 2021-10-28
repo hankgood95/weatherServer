@@ -24,8 +24,7 @@ public class Application implements CommandLineRunner{
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
 	
-	private Logger logger = LoggerFactory.getLogger(Application.class);
-	
+	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	public Application(ApiKey apk) {
 		this.APK = apk;
 	}
@@ -57,7 +56,7 @@ public class Application implements CommandLineRunner{
         		.baseUrl(BASE_URL) //baseURI 설정하고
         		.clientConnector(new ReactorClientHttpConnector(client)) //위에서 만든 타임아웃 설정을 적용시키고
         		.build(); //빌드한다.
-
+        
         String response = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
                         .queryParam("serviceKey", serviceKey)
