@@ -27,6 +27,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- webclient를 사용하기 위해서 -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-webflux</artifactId>
@@ -43,8 +44,6 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.10.0</version>
 		</dependency>
-		
-
 	</dependencies>
 
 	<build>

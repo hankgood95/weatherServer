@@ -25,4 +25,10 @@ public class Body {
 	public int getTotalCount() {
 		return totalCount;
 	}
+	@Override
+	public String toString() {
+		return "Body [dataType=" + dataType + ", items=" + items + ", pageNo=" + pageNo + ", numOfRows=" + numOfRows
+				+ ", totalCount=" + totalCount + "]";
+	}
+	
 }

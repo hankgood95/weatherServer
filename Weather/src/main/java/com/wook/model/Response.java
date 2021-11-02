@@ -12,4 +12,9 @@ public class Response {
 	public Body getBody() {
 		return body;
 	}
+	@Override
+	public String toString() {
+		return "Response [header=" + header + ", body=" + body + "]";
+	}
+	
 }
