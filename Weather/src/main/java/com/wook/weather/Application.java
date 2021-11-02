@@ -13,20 +13,17 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wook.model.Item;
-import com.wook.model.Response;
 import com.wook.model.SweatherRootRes;
 
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather"})
 public class Application implements CommandLineRunner{
 
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
-	SweatherRootRes result;
+	private SweatherRootRes result;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
@@ -77,34 +74,16 @@ public class Application implements CommandLineRunner{
                         .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
                 .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
-        	
-        response.subscribe(res -> {result.setResponse(res.getResponse());});
         
-//        logger.info(response);
-//        
-//        ObjectMapper obm = new ObjectMapper(); //String 으로 된 json object를 class 형식으로 바꿀수 있게 해주는 ObjectMapper 클래스 인스턴스 생성
-//        
-//        SweatherRootRes res = obm.readValue(response, SweatherRootRes.class); //String으로 된 json을 SweatherRootRes 클래스 형식으로 변환함
-//        
-//        List<Item> item = res.getResponse().getBody().getItems().getItem();
-//        
-//        int count = 0; //최고 온도와 최저 온도만 받으면 되기 때문에 이를 체크할 flag를 만듬
-//        for(Item it : item) {
-//        	if(count>=2) { //최고 온도와 최저 온도를 확인했다면 반복문에서 탈출
-//        		break;
-//        	}
-//            if(it.getCategory().equals("TMN")){
-//            	logger.info(it.toString());
-//            	count++; //count++ 해서 최저 기온 체크 표시
-//            }
-//            if(it.getCategory().equals("TMX")) {
-//            	logger.info(it.toString());
-//            	count++; //count++ 해서 최고 기온 체크 표시
-//            }	
-//        }
         
-        //그램에서 브랜치 생성후 커밋한다.
-        //이건 컴터 본체에서 커밋한다.
+        //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
+        response.subscribe(res -> {
+        	result.setResponse(res.getResponse());
+        	logger.info(result.toString());
+        });
+        
+
+        
     }
     
 }
