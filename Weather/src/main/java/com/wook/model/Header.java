@@ -12,4 +12,9 @@ public class Header {
 	public String getResultMsg() {
 		return resultMsg;
 	}
+	@Override
+	public String toString() {
+		return "Header [resultCode=" + resultCode + ", resultMsg=" + resultMsg + "]";
+	}
+	
 }

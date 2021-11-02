@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,8 +15,10 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wook.model.Item;
+import com.wook.model.Response;
 import com.wook.model.SweatherRootRes;
 
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 @SpringBootApplication
@@ -23,10 +26,14 @@ public class Application implements CommandLineRunner{
 
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
+	SweatherRootRes result;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
-	public Application(ApiKey apk) {
+	
+	@Autowired
+	public Application(ApiKey apk, SweatherRootRes result) {
 		this.APK = apk;
+		this.result = result;
 	}
 	
 	public static void main(String[] args) {
@@ -40,7 +47,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211026";
+        String base_date = "20211101";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
@@ -57,7 +64,7 @@ public class Application implements CommandLineRunner{
         		.clientConnector(new ReactorClientHttpConnector(client)) //위에서 만든 타임아웃 설정을 적용시키고
         		.build(); //빌드한다.
         
-        String response = wc.get()
+        Mono<SweatherRootRes> response = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("numOfRows", numOfRows)
@@ -69,31 +76,32 @@ public class Application implements CommandLineRunner{
                         .queryParam("ny", ny) //지역정보
                         .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
-                .bodyToMono(String.class) //Mono로 값을 받고
-                .block(); //동기식으로 받는다.
-
-        logger.info(response);
+                .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
+        	
+        response.subscribe(res -> {result.setResponse(res.getResponse());});
         
-        ObjectMapper obm = new ObjectMapper(); //String 으로 된 json object를 class 형식으로 바꿀수 있게 해주는 ObjectMapper 클래스 인스턴스 생성
-        
-        SweatherRootRes res = obm.readValue(response, SweatherRootRes.class); //String으로 된 json을 SweatherRootRes 클래스 형식으로 변환함
-        
-        List<Item> item = res.getResponse().getBody().getItems().getItem();
-        
-        int count = 0; //최고 온도와 최저 온도만 받으면 되기 때문에 이를 체크할 flag를 만듬
-        for(Item it : item) {
-        	if(count>=2) { //최고 온도와 최저 온도를 확인했다면 반복문에서 탈출
-        		break;
-        	}
-            if(it.getCategory().equals("TMN")){
-            	logger.info(it.toString());
-            	count++; //count++ 해서 최저 기온 체크 표시
-            }
-            if(it.getCategory().equals("TMX")) {
-            	logger.info(it.toString());
-            	count++; //count++ 해서 최고 기온 체크 표시
-            }	
-        }
+//        logger.info(response);
+//        
+//        ObjectMapper obm = new ObjectMapper(); //String 으로 된 json object를 class 형식으로 바꿀수 있게 해주는 ObjectMapper 클래스 인스턴스 생성
+//        
+//        SweatherRootRes res = obm.readValue(response, SweatherRootRes.class); //String으로 된 json을 SweatherRootRes 클래스 형식으로 변환함
+//        
+//        List<Item> item = res.getResponse().getBody().getItems().getItem();
+//        
+//        int count = 0; //최고 온도와 최저 온도만 받으면 되기 때문에 이를 체크할 flag를 만듬
+//        for(Item it : item) {
+//        	if(count>=2) { //최고 온도와 최저 온도를 확인했다면 반복문에서 탈출
+//        		break;
+//        	}
+//            if(it.getCategory().equals("TMN")){
+//            	logger.info(it.toString());
+//            	count++; //count++ 해서 최저 기온 체크 표시
+//            }
+//            if(it.getCategory().equals("TMX")) {
+//            	logger.info(it.toString());
+//            	count++; //count++ 해서 최고 기온 체크 표시
+//            }	
+//        }
         
         //그램에서 브랜치 생성후 커밋한다.
         //이건 컴터 본체에서 커밋한다.
