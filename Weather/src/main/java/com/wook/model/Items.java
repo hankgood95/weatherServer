@@ -12,4 +12,9 @@ public class Items {
 		return item;
 	}
 
+	@Override
+	public String toString() {
+		return "Items [item=" + item + "]";
+	}
+	
 }
