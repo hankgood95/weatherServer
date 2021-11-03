@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import com.wook.model.Item;
+import com.wook.model.Items;
 import com.wook.model.SweatherRootRes;
+import com.wook.model.Temperature;
 
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -24,13 +28,15 @@ public class Application implements CommandLineRunner{
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
 	private SweatherRootRes result;
+	private Temperature temp;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, SweatherRootRes result) {
+	public Application(ApiKey apk, SweatherRootRes result,Temperature temp) {
 		this.APK = apk;
 		this.result = result;
+		this.temp = temp;
 	}
 	
 	public static void main(String[] args) {
@@ -44,7 +50,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211101";
+        String base_date = "20211102";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
@@ -73,17 +79,49 @@ public class Application implements CommandLineRunner{
                         .queryParam("ny", ny) //지역정보
                         .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
+    			.onStatus(HttpStatus::is4xxClientError,
+    					error -> Mono.error(new RuntimeException("API not found")))
+    			.onStatus(HttpStatus::is5xxServerError,
+    					error -> Mono.error(new RuntimeException("Server is not responding")))
                 .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
         
         
         //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
         response.subscribe(res -> {
         	result.setResponse(res.getResponse());
-        	logger.info(result.toString());
+        	if(result.getResponse().getBody()!= null) {
+        		logger.info("http request success");
+        		getTemp(result.getResponse().getBody().getItems());
+            	logger.info(temp.toString());
+        	}else {
+        		logger.error("http reqeust has failed");
+        	}
         });
         
 
         
+    }
+    
+    public void getTemp(Items items) {
+    	
+    	int count = 0;
+    	for(Item item : items.getItem()) {
+    		if(count >= 2 ) 
+    			break;
+    		if(item.getCategory().equals("TMX")) {
+    			temp.setBestMax(item.getFcstValue());
+    			temp.setNx(item.getNx());
+    			temp.setNy(item.getNy());
+    			temp.setDate(item.getBaseDate());
+    			count++;
+    		}
+    		if(item.getCategory().equals("TMN")){
+    			temp.setBestMin(item.getFcstValue());
+    			count++;
+    		}
+    			
+    	}
+    	
     }
     
 }
