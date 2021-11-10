@@ -1,4 +1,4 @@
-package com.wook.weather;
+package com.wook.controller;
 
 import java.time.Duration;
 
@@ -13,6 +13,8 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import com.wook.dao.GeoDao;
+import com.wook.model.ApiKey;
 import com.wook.model.Item;
 import com.wook.model.Items;
 import com.wook.model.SweatherRootRes;
@@ -21,21 +23,23 @@ import com.wook.model.Temperature;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather"})
+@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.dao"})
 public class Application implements CommandLineRunner{
 
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
 	private SweatherRootRes result;
 	private Temperature temp;
+	private GeoDao geodao;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, SweatherRootRes result,Temperature temp) {
+	public Application(ApiKey apk, SweatherRootRes result,Temperature temp,GeoDao geodao) {
 		this.APK = apk;
 		this.result = result;
 		this.temp = temp;
+		this.geodao = geodao;
 	}
 	
 	public static void main(String[] args) {
@@ -49,7 +53,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211102";
+        String base_date = "20211109";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
@@ -97,7 +101,7 @@ public class Application implements CommandLineRunner{
         	}
         });
         
-
+        logger.info(geodao.getGeoData().toString());
         
     }
     
