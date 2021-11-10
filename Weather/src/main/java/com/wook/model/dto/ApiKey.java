@@ -1,4 +1,4 @@
-package com.wook.model;
+package com.wook.model.dto;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

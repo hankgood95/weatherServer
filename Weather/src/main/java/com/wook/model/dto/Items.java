@@ -1,4 +1,4 @@
-package com.wook.model;
+package com.wook.model.dto;
 
 import java.util.List;
 

@@ -13,33 +13,34 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import com.wook.dao.GeoDao;
-import com.wook.model.ApiKey;
-import com.wook.model.Item;
-import com.wook.model.Items;
-import com.wook.model.SweatherRootRes;
-import com.wook.model.Temperature;
+import com.wook.model.dto.ApiKey;
+import com.wook.model.dto.Item;
+import com.wook.model.dto.Items;
+import com.wook.model.dto.SweatherRootRes;
+import com.wook.model.dto.Temperature;
+import com.wook.service.GeoService;
 
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.dao"})
+@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
 public class Application implements CommandLineRunner{
 
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	private final ApiKey APK;
 	private SweatherRootRes result;
 	private Temperature temp;
-	private GeoDao geodao;
+	
+	private GeoService gs; //To get GeoService
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, SweatherRootRes result,Temperature temp,GeoDao geodao) {
+	public Application(ApiKey apk, SweatherRootRes result,Temperature temp, GeoService gs) {
 		this.APK = apk;
 		this.result = result;
 		this.temp = temp;
-		this.geodao = geodao;
+		this.gs = gs;
 	}
 	
 	public static void main(String[] args) {
@@ -53,7 +54,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211109";
+        String base_date = "20211110";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
@@ -101,8 +102,7 @@ public class Application implements CommandLineRunner{
         	}
         });
         
-        logger.info(geodao.getGeoData().toString());
-        
+        logger.info(gs.toString()); // I used GeoService
     }
     
     public void getTemp(Items items) {
