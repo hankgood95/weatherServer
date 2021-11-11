@@ -2,6 +2,7 @@ package com.wook.service;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Service;
 
 import com.wook.model.dao.GeoDao;
