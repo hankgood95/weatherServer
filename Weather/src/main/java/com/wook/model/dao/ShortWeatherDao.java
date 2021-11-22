@@ -41,18 +41,37 @@ public class ShortWeatherDao implements Runnable{
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public ShortWeatherDao(String name,ExecutorService exs,CountDownLatch cdl,ShortWeatherReq swr,SweatherRootRes result
-			,Temperature temp) {
+	public ShortWeatherDao(SweatherRootRes result,Temperature temp) {
 		
 		super();
-		this.threadName = name;
-		tpe = (ThreadPoolExecutor) exs;
-		this.cdl = cdl;
-		this.swr = swr;
 		this.result = result;
 		this.temp = temp;
 	}
 	
+	
+	
+	public ShortWeatherDao(String threadName,ExecutorService exs, CountDownLatch cdl, ShortWeatherReq swr) {
+		super();
+		this.threadName = threadName;
+		tpe = (ThreadPoolExecutor) exs;
+		this.cdl = cdl;
+		this.swr = swr;
+	}
+
+
+
+	public Temperature getTemp() {
+		return temp;
+	}
+
+
+
+	public void setTemp(Temperature temp) {
+		this.temp = temp;
+	}
+
+
+
 	@Override
 	public void run() {
 		//여기서 API를 호출할거임
@@ -93,9 +112,10 @@ public class ShortWeatherDao implements Runnable{
         response.subscribe(res -> {
         	result.setResponse(res.getResponse());
         	if(result.getResponse().getBody()!= null) {
-        		logger.info("http request success");
+        		logger.info(threadName+" : "+"http request success");
         		getTemp(result.getResponse().getBody().getItems());
             	logger.info(temp.toString());
+            	cdl.countDown();
         	}else {
         		logger.error("http reqeust has failed");
         	}
