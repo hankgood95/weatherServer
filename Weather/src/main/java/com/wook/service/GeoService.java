@@ -2,13 +2,14 @@ package com.wook.service;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Service;
 
 import com.wook.model.dao.GeoDao;
 import com.wook.model.dto.GeoInfo;
 
 @Service
+@MapperScan("com.wook.model.dao")
 public class GeoService {
 	private GeoDao geodao;
 	
