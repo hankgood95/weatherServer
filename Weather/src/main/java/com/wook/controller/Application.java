@@ -17,6 +17,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.wook.model.dto.ApiKey;
 import com.wook.model.dto.Item;
 import com.wook.model.dto.Items;
+import com.wook.model.dto.ShortWeatherReq;
 import com.wook.model.dto.SweatherRootRes;
 import com.wook.model.dto.Temperature;
 import com.wook.service.GeoService;
@@ -56,11 +57,13 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211110";
+        String base_date = "20211111";
         String base_time = "2300";
         String nx = "55";
         String ny = "127";
 
+        ShortWeatherReq swr = new ShortWeatherReq(serviceKey,pageNo,numOfRows,dataType,base_date,base_time,nx,ny);
+        
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(BASE_URL); //UriBuilder를 생성하는 옵션을 설정하는 DefaultUriBuilderFactory 인스턴스 생성
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY); //encoding 모드 설정
 
@@ -73,16 +76,23 @@ public class Application implements CommandLineRunner{
         		.clientConnector(new ReactorClientHttpConnector(client)) //위에서 만든 타임아웃 설정을 적용시키고
         		.build(); //빌드한다.
         
+        
+     // This part is the part that approach to a List<GeoInfo>
+        
+//      for(GeoInfo gi : gs.getGeoXY()) {
+//    	logger.info(gi.toString());
+//    }
+        
         Mono<SweatherRootRes> response = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
-                        .queryParam("serviceKey", serviceKey)
-                        .queryParam("numOfRows", numOfRows)
-                        .queryParam("pageNo", pageNo)
-                        .queryParam("dataType", dataType)
-                        .queryParam("base_date", base_date)
-                        .queryParam("base_time", base_time)
-                        .queryParam("nx", nx) //지역정보
-                        .queryParam("ny", ny) //지역정보
+                        .queryParam("serviceKey", swr.getServiceKey())
+                        .queryParam("numOfRows", swr.getNumOfRows())
+                        .queryParam("pageNo", swr.getPageNo())
+                        .queryParam("dataType", swr.getDataType())
+                        .queryParam("base_date", swr.getBase_date())
+                        .queryParam("base_time", swr.getBase_time())
+                        .queryParam("nx", swr.getNx()) //지역정보
+                        .queryParam("ny", swr.getNy()) //지역정보
                         .build()) //위 쿼리들로 uri 빌드를 하고
                 .retrieve() //http 요청하고
     			.onStatus(HttpStatus::is4xxClientError,
@@ -103,9 +113,6 @@ public class Application implements CommandLineRunner{
         		logger.error("http reqeust has failed");
         	}
         });
-//        for(GeoInfo gi : gs.getGeoXY()) {
-//        	logger.info(gi.toString());
-//        }
     }
     
     public void getTemp(Items items) {
