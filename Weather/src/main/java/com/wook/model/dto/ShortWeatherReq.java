@@ -1,17 +1,20 @@
 package com.wook.model.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ShortWeatherReq {
-    String serviceKey;
-    String pageNo;
-    String numOfRows;
-    String dataType;
-    String base_date;
-    String base_time;
-    String nx;
-    String ny;
+    private String serviceKey;
+    private String pageNo;
+    private String numOfRows;
+    private String dataType;
+    private String base_date;
+    private String base_time;
+    private int nx;
+    private int ny;
     
 	public ShortWeatherReq(String serviceKey, String pageNo, String numOfRows, String dataType, String base_date,
-			String base_time, String nx, String ny) {
+			String base_time, int nx, int ny) {
 		super();
 		this.serviceKey = serviceKey;
 		this.pageNo = pageNo;
@@ -71,19 +74,19 @@ public class ShortWeatherReq {
 		this.base_time = base_time;
 	}
 
-	public String getNx() {
+	public int getNx() {
 		return nx;
 	}
 
-	public void setNx(String nx) {
+	public void setNx(int nx) {
 		this.nx = nx;
 	}
 
-	public String getNy() {
+	public int getNy() {
 		return ny;
 	}
 
-	public void setNy(String ny) {
+	public void setNy(int ny) {
 		this.ny = ny;
 	}
 
