@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.wook.model.dto.ApiKey;
+import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.Item;
 import com.wook.model.dto.Items;
 import com.wook.model.dto.ShortWeatherReq;
@@ -26,7 +27,6 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 @SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
-@MapperScan("com.wook.model.dao")
 public class Application implements CommandLineRunner{
 
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
