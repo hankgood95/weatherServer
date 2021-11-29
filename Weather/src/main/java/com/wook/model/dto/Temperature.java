@@ -11,6 +11,11 @@ public class Temperature {
 	private int nx;
 	private int ny;
 	
+	
+	
+	public Temperature() {
+		super();
+	}
 	public String getBestMin() {
 		return bestMin;
 	}

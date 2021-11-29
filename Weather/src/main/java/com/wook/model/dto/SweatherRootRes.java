@@ -6,6 +6,13 @@ import org.springframework.stereotype.Component;
 public class SweatherRootRes {
 	private Response response;
 
+	
+	
+	public SweatherRootRes() {
+		super();
+	}
+
+
 	public Response getResponse() {
 		return response;
 	}

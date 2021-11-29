@@ -1,9 +1,8 @@
 package com.wook.model.dao;
 
+import java.nio.channels.CompletionHandler;
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,11 @@ public class ShortWeatherDao implements Runnable{
 	
 	private final static String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 	
-	private String threadName;
-	private ThreadPoolExecutor tpe;
 	private CountDownLatch cdl;
 	private ShortWeatherReq swr;
 	private SweatherRootRes result;
 	private Temperature temp;
+	private CompletionHandler<Temperature,Void> callBack;
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
@@ -49,13 +47,12 @@ public class ShortWeatherDao implements Runnable{
 	}
 	
 	
-	
-	public ShortWeatherDao(String threadName,ExecutorService exs, CountDownLatch cdl, ShortWeatherReq swr) {
+	public ShortWeatherDao(CountDownLatch cdl, ShortWeatherReq swr, 
+			CompletionHandler<Temperature,Void> callBack) {
 		super();
-		this.threadName = threadName;
-		tpe = (ThreadPoolExecutor) exs;
 		this.cdl = cdl;
 		this.swr = swr;
+		this.callBack = callBack;
 	}
 
 
@@ -79,6 +76,7 @@ public class ShortWeatherDao implements Runnable{
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(BASE_URL); //UriBuilder를 생성하는 옵션을 설정하는 DefaultUriBuilderFactory 인스턴스 생성
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY); //encoding 모드 설정
 
+        
         HttpClient client = HttpClient.create()
         		.responseTimeout(Duration.ofSeconds(60)); //http response timeout 설정을 60초로 설정함
         
@@ -88,6 +86,8 @@ public class ShortWeatherDao implements Runnable{
         		.clientConnector(new ReactorClientHttpConnector(client)) //위에서 만든 타임아웃 설정을 적용시키고
         		.build(); //빌드한다.
         
+        logger.info(swr.toString());
+        result = new SweatherRootRes();
         
         Mono<SweatherRootRes> response = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
@@ -107,14 +107,14 @@ public class ShortWeatherDao implements Runnable{
     					error -> Mono.error(new RuntimeException("Server is not responding")))
                 .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
         
-        
         //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
         response.subscribe(res -> {
         	result.setResponse(res.getResponse());
         	if(result.getResponse().getBody()!= null) {
-        		logger.info(threadName+" : "+"http request success");
+        		logger.info("http request success");
         		getTemp(result.getResponse().getBody().getItems());
             	logger.info(temp.toString());
+            	callBack.completed(temp, null);
             	cdl.countDown();
         	}else {
         		logger.error("http reqeust has failed");
@@ -126,6 +126,7 @@ public class ShortWeatherDao implements Runnable{
     public void getTemp(Items items) {
     	
     	int count = 0;
+    	temp = new Temperature();
     	for(Item item : items.getItem()) {
     		if(count >= 2 ) 
     			break;
