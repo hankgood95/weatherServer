@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ShortWeatherReq {
+	
     private String serviceKey;
     private String pageNo;
     private String numOfRows;
@@ -13,6 +14,12 @@ public class ShortWeatherReq {
     private int nx;
     private int ny;
     
+    
+    
+	public ShortWeatherReq() {
+		super();
+	}
+
 	public ShortWeatherReq(String serviceKey, String pageNo, String numOfRows, String dataType, String base_date,
 			String base_time, int nx, int ny) {
 		super();

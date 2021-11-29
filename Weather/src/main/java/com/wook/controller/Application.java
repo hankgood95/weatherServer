@@ -1,5 +1,6 @@
 package com.wook.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,14 +26,17 @@ public class Application implements CommandLineRunner{
 	private ShortWeatherService sws;
 	private List<Temperature> temperList;
 	private List<ShortWeatherReq> swrList;
+	private ShortWeatherReq swr;
+	
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, GeoService gs, ShortWeatherService sws) {
+	public Application(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr) {
 		this.APK = apk;
 		this.gs = gs;
 		this.sws = sws;
+		this.swr = swr;
 	}
 	
 	public static void main(String[] args) {
@@ -46,17 +50,19 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211123";
+        String base_date = "20211128";
         String base_time = "2300";
 
+        swrList = new ArrayList<>();
+        
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
         for(GeoInfo gi : gs.getGeoXY()) {
-        	swrList.add(new ShortWeatherReq(serviceKey,pageNo,numOfRows,dataType,base_date,base_time,gi.getX(),gi.getY()));
+        	swr = new ShortWeatherReq(serviceKey,pageNo,numOfRows,dataType,base_date,base_time,gi.getX(),gi.getY());
+        	swrList.add(swr);
         }
         
         //위 객체를 가지고 이제 API를 호출할수 있게 Service에게 전해줘야 함
         sws.setSwrList(swrList);
-        sws.setGeoList(gs.getGeoXY());
         
         temperList = sws.callSW();
         
