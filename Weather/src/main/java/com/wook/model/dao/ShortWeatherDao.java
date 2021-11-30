@@ -78,7 +78,7 @@ public class ShortWeatherDao implements Runnable{
 
         
         HttpClient client = HttpClient.create()
-        		.responseTimeout(Duration.ofSeconds(60)); //http response timeout 설정을 60초로 설정함
+        		.responseTimeout(Duration.ofSeconds(100)); //http response timeout 설정을 60초로 설정함
         
         WebClient wc = WebClient.builder()
         		.uriBuilderFactory(factory) //위에서 만든 uri 인코딩 설정으로 uribuilder 설정을 함
@@ -86,7 +86,6 @@ public class ShortWeatherDao implements Runnable{
         		.clientConnector(new ReactorClientHttpConnector(client)) //위에서 만든 타임아웃 설정을 적용시키고
         		.build(); //빌드한다.
         
-        logger.info(swr.toString());
         result = new SweatherRootRes();
         
         Mono<SweatherRootRes> response = wc.get()
@@ -111,9 +110,7 @@ public class ShortWeatherDao implements Runnable{
         response.subscribe(res -> {
         	result.setResponse(res.getResponse());
         	if(result.getResponse().getBody()!= null) {
-        		logger.info("http request success");
         		getTemp(result.getResponse().getBody().getItems());
-            	logger.info(temp.toString());
             	callBack.completed(temp, null);
             	cdl.countDown();
         	}else {

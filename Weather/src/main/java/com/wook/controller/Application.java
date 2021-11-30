@@ -50,7 +50,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211128";
+        String base_date = "20211129";
         String base_time = "2300";
 
         swrList = new ArrayList<>();
@@ -65,6 +65,8 @@ public class Application implements CommandLineRunner{
         sws.setSwrList(swrList);
         
         temperList = sws.callSW();
+        
+        logger.info("Main Thread End");
         
         
         
