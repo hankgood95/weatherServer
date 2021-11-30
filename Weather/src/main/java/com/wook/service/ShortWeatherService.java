@@ -55,8 +55,8 @@ public class ShortWeatherService {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
 		
-		CountDownLatch cdl = new CountDownLatch(swrListSize);
-		ExecutorService exs = Executors.newFixedThreadPool(500);
+		CountDownLatch cdl = new CountDownLatch(50);
+		ExecutorService exs = Executors.newFixedThreadPool(25);
 		
 		List<Temperature> tl = new ArrayList<>();
 		
@@ -71,7 +71,6 @@ public class ShortWeatherService {
 							System.out.println("found it");
 							System.exit(0);
 						}
-						System.out.println("CallBack : "+result.toString());
 						tl.add(result); //전달받은 객체 인자를 list에 추가함
 					}
 					
@@ -84,18 +83,16 @@ public class ShortWeatherService {
 			
 		};
 		
-		for(int i = 0; i<swrListSize;i++) {
+		for(int i = 0; i<50;i++) {
 			exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
 		}
 		
 		exs.shutdown();
 		cdl.await();
 		
-		logger.info(String.valueOf(tl.size()));
+		logger.info("Success API : "+String.valueOf(tl.size()));
 		
-		//문제 발생 Thread에서 호출해서 API 호출이 완료 되었을때 Temperature 클래스를 반환하려고 했으나
-		//우리가 Service에서 반환해야 하는것은 Temperature List인대 우리가 정작 DAO로부터 반환 받는것은 Temperature 클래스 하나임
-		//각각의 Thread에서 받은 Temperature를 List에 합칠 방법을 생각해야함
+		//이게 되는게 있고 안되는게 있음
 		
 		return null;
 	}
