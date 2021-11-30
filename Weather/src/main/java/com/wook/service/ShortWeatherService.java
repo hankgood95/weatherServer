@@ -55,8 +55,8 @@ public class ShortWeatherService {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
 		
-		CountDownLatch cdl = new CountDownLatch(50);
-		ExecutorService exs = Executors.newFixedThreadPool(25);
+		CountDownLatch cdl = new CountDownLatch(100);
+		ExecutorService exs = Executors.newFixedThreadPool(50);
 		
 		List<Temperature> tl = new ArrayList<>();
 		
@@ -83,7 +83,7 @@ public class ShortWeatherService {
 			
 		};
 		
-		for(int i = 0; i<50;i++) {
+		for(int i = 0; i<100;i++) {
 			exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
 		}
 		
