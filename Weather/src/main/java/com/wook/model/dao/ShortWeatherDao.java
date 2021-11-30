@@ -78,7 +78,7 @@ public class ShortWeatherDao implements Runnable{
 
         
         HttpClient client = HttpClient.create()
-        		.responseTimeout(Duration.ofSeconds(100)); //http response timeout 설정을 60초로 설정함
+        		.responseTimeout(Duration.ofSeconds(60)); //http response timeout 설정을 60초로 설정함
         
         WebClient wc = WebClient.builder()
         		.uriBuilderFactory(factory) //위에서 만든 uri 인코딩 설정으로 uribuilder 설정을 함
