@@ -70,7 +70,7 @@ public class ShortWeatherService {
 				fPlus = swrListSize;
 			}
 			
-			if(fifty > swrListSize - tl.size()) {
+			if(fifty > swrListSize - tl.size()) { //만약 50이 현재 남아있는 데이터보다 크다면 진입해서 현재 남아있는 데이터수로 바꿔줌
 				fifty = swrListSize - tl.size();
 			}
 			
