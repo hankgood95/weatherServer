@@ -54,45 +54,63 @@ public class ShortWeatherService {
 	public List<Temperature> callSW() throws InterruptedException {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
-		
-		CountDownLatch cdl = new CountDownLatch(100);
-		ExecutorService exs = Executors.newFixedThreadPool(50);
-		
+		logger.info(String.valueOf(swrListSize));
 		List<Temperature> tl = new ArrayList<>();
+		int count = 0;
 		
-		CompletionHandler<Temperature,Void> callBack = 
-				new CompletionHandler<Temperature,Void>(){
-
-					//성공했을떄
-					@Override
-					public void completed(Temperature result, Void attachment) {
-						// TODO Auto-generated method stub
-						if(result == null) {
-							System.out.println("found it");
-							System.exit(0);
-						}
-						tl.add(result); //전달받은 객체 인자를 list에 추가함
-					}
-					
-					//실패했을때
-					@Override
-					public void failed(Throwable exc, Void attachment) {
-						// TODO Auto-generated method stub
-						System.out.println("failed");
-					}
+		while(count < swrListSize) { //count가 1668보다 작으면 진입
 			
-		};
-		
-		for(int i = 0; i<100;i++) {
-			exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
+			int beforeCall = tl.size();
+			
+			CountDownLatch cdl = new CountDownLatch(50);
+			ExecutorService exs = Executors.newFixedThreadPool(25);
+			
+			CompletionHandler<Temperature,Void> callBack = 
+					new CompletionHandler<Temperature,Void>(){
+
+						//성공했을떄
+						@Override
+						public void completed(Temperature result, Void attachment) {
+							// TODO Auto-generated method stub
+							if(result == null) {
+								System.out.println("found it");
+								System.exit(0);
+							}
+							tl.add(result); //전달받은 객체 인자를 list에 추가함
+						}
+						
+						//실패했을때
+						@Override
+						public void failed(Throwable exc, Void attachment) {
+							// TODO Auto-generated method stub
+							System.out.println("failed");
+						}
+				
+			};
+			
+			int fPlus = count+50;
+			
+			for(int i = count; i<fPlus;i++) {
+				exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
+			}
+			
+			exs.shutdown();
+			cdl.await();
+			
+			int afterCall = tl.size();
+			int differ = afterCall - beforeCall;
+			count = count + differ;
+			logger.info("Success API : "+String.valueOf(tl.size()));
+			
+			logger.info("-------------------");
+			Thread.sleep(500);
+			
 		}
 		
-		exs.shutdown();
-		cdl.await();
+		//모두 호출하는것은 가능하게 했으나 이제 문제는 몇몇개가 빠지는 현상이 발생하게 됨
+		//빠지는 지점에서 해당 부분을 다시 호출하는걸 만들어야함
 		
-		logger.info("Success API : "+String.valueOf(tl.size()));
-		
-		//이게 되는게 있고 안되는게 있음
+		logger.info(String.valueOf(tl.size()));
 		
 		return null;
 	}
