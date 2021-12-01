@@ -111,6 +111,7 @@ public class ShortWeatherDao implements Runnable{
         	result.setResponse(res.getResponse());
         	if(result.getResponse().getBody()!= null) {
         		getTemp(result.getResponse().getBody().getItems());
+        		logger.info(temp.toString());
             	callBack.completed(temp, null);
             	cdl.countDown();
         	}else {
