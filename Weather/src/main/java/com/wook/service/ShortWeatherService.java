@@ -56,13 +56,25 @@ public class ShortWeatherService {
 		int swrListSize = swrList.size();
 		logger.info(String.valueOf(swrListSize));
 		List<Temperature> tl = new ArrayList<>();
+		
 		int count = 0;
+		int fifty = 50; 
 		
 		while(count < swrListSize) { //count가 1668보다 작으면 진입
 			
 			int beforeCall = tl.size();
 			
-			CountDownLatch cdl = new CountDownLatch(50);
+			int fPlus = count+50; //세고 있는 숫자의 수를 50씩 늘리는거임
+			
+			if(fPlus > swrListSize) { //만약 50더한게 List 사이즈보다 크면 진입
+				fPlus = swrListSize;
+			}
+			
+			if(fifty > swrListSize - tl.size()) { //만약 50이 현재 남아있는 데이터보다 크다면 진입해서 현재 남아있는 데이터수로 바꿔줌
+				fifty = swrListSize - tl.size();
+			}
+			
+			CountDownLatch cdl = new CountDownLatch(fifty);
 			ExecutorService exs = Executors.newFixedThreadPool(25);
 			
 			CompletionHandler<Temperature,Void> callBack = 
@@ -88,7 +100,7 @@ public class ShortWeatherService {
 				
 			};
 			
-			int fPlus = count+50;
+
 			
 			for(int i = count; i<fPlus;i++) {
 				exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
@@ -112,6 +124,6 @@ public class ShortWeatherService {
 		
 		logger.info(String.valueOf(tl.size()));
 		
-		return null;
+		return tl;
 	}
 }
