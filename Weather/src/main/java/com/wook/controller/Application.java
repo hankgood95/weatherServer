@@ -50,7 +50,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211201";
+        String base_date = "20211202";
         String base_time = "2300";
 
         swrList = new ArrayList<>();
