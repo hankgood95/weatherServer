@@ -119,9 +119,6 @@ public class ShortWeatherService {
 			
 		}
 		
-		//모두 호출하는것은 가능하게 했으나 이제 문제는 몇몇개가 빠지는 현상이 발생하게 됨
-		//빠지는 지점에서 해당 부분을 다시 호출하는걸 만들어야함
-		
 		logger.info(String.valueOf(tl.size()));
 		
 		return tl;
