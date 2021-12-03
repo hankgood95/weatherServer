@@ -67,11 +67,17 @@ public class Application implements CommandLineRunner{
         temperList = sws.callSW();
         
         logger.info("-------------------");
+        
+        //List에 담긴 온도 출력
         for(Temperature temp : temperList) {
         	logger.info(temp.toString());
         }
+        
         logger.info("temperList Size : "+String.valueOf(temperList.size()));
         logger.info("Main Thread End");
+        
+        //이제 여기서 해야할일은 만든 온도 List를 DB에 저장시키는것을 하면 된다.
+        //이건 별로 안 힘들것 같다. 왜냐하면 이미 DB에서 값을 가져오는것을 했기때문
         
         
         
