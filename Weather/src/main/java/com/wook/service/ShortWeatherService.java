@@ -121,6 +121,8 @@ public class ShortWeatherService {
 		
 		logger.info(String.valueOf(tl.size()));
 		
+		
+		
 		return tl;
 	}
 }
