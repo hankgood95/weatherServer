@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Temperature {
 	
+	private String tempKey;
 	private String bestMin;
 	private String bestMax;
 	private String date;
@@ -16,6 +17,32 @@ public class Temperature {
 	public Temperature() {
 		super();
 	}
+	
+	public Temperature(String tempKey, String bestMin, String bestMax, String date, int nx, int ny) {
+		super();
+		this.tempKey = tempKey;
+		this.bestMin = bestMin;
+		this.bestMax = bestMax;
+		this.date = date;
+		this.nx = nx;
+		this.ny = ny;
+	}
+
+
+
+
+	public String getTempKey() {
+		return tempKey;
+	}
+
+
+
+	public void setTempKey(String tempKey) {
+		this.tempKey = tempKey;
+	}
+
+
+
 	public String getBestMin() {
 		return bestMin;
 	}
@@ -46,11 +73,11 @@ public class Temperature {
 	public void setNy(int ny) {
 		this.ny = ny;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Temperature [bestMin=" + bestMin + ", bestMax=" + bestMax + ", date=" + date + ", nx=" + nx + ", ny="
-				+ ny + "]";
+		return "Temperature [tempKey=" + tempKey + ", bestMin=" + bestMin + ", bestMax=" + bestMax + ", date=" + date
+				+ ", nx=" + nx + ", ny=" + ny + "]";
 	}
 	
 	

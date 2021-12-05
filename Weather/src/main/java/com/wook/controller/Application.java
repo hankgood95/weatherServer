@@ -16,6 +16,7 @@ import com.wook.model.dto.ShortWeatherReq;
 import com.wook.model.dto.Temperature;
 import com.wook.service.GeoService;
 import com.wook.service.ShortWeatherService;
+import com.wook.service.TempService;
 
 @SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
 public class Application implements CommandLineRunner{
@@ -27,16 +28,18 @@ public class Application implements CommandLineRunner{
 	private List<Temperature> temperList;
 	private List<ShortWeatherReq> swrList;
 	private ShortWeatherReq swr;
+	private TempService ts; //To save TempService
 	
 	
 	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr) {
+	public Application(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr, TempService ts) {
 		this.APK = apk;
 		this.gs = gs;
 		this.sws = sws;
 		this.swr = swr;
+		this.ts = ts;
 	}
 	
 	public static void main(String[] args) {
@@ -50,7 +53,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211202";
+        String base_date = "20211205";
         String base_time = "2300";
 
         swrList = new ArrayList<>();
@@ -68,20 +71,18 @@ public class Application implements CommandLineRunner{
         
         logger.info("-------------------");
         
-        //List에 담긴 온도 출력
-        for(Temperature temp : temperList) {
-        	logger.info(temp.toString());
-        }
-        
         logger.info("API ConnectionSuccess");
         
+        logger.info("-------------------");
         
+        //List에 담긴 온도 DB에 저장
+        for(int i = 0;i<temperList.size();i++) {
+        	Temperature temp = temperList.get(i);
+        	temp.setTempKey(i+temp.getDate());
+        	ts.saveTemp(temp);
+        }
         
-        //이제 여기서 해야할일은 만든 온도 List를 DB에 저장시키는것을 하면 된다.
-        //이건 별로 안 힘들것 같다. 왜냐하면 이미 DB에서 값을 가져오는것을 했기때문
-        
-        
-        
+        logger.info("DB Store Success");
     }
     
 }

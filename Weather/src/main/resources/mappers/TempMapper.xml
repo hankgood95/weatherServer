@@ -1,1 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wook.model.dao.TempDao">
+	<insert id="insertTemp" parameterType="Temperature">
+		INSERT INTO MAX_MIN_TEMP (TEMP_KEY, MAX_TEMP, MIN_TEMP, BASE_DATE, X, Y) VALUES (#{tempKey},#{bestMin},#{bestMax},#{date},#{nx},#{ny})
+	</insert>
+</mapper>
