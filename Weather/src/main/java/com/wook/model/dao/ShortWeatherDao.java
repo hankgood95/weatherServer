@@ -125,6 +125,7 @@ public class ShortWeatherDao implements Runnable{
     	
     	int count = 0;
     	temp = new Temperature();
+    	
     	for(Item item : items.getItem()) {
     		if(count >= 2 ) 
     			break;
@@ -134,6 +135,7 @@ public class ShortWeatherDao implements Runnable{
     			temp.setNy(item.getNy());
     			temp.setDate(item.getBaseDate());
     			count++;
+    			
     		}
     		if(item.getCategory().equals("TMN")){
     			temp.setBestMin(item.getFcstValue());
@@ -141,6 +143,7 @@ public class ShortWeatherDao implements Runnable{
     		}
     			
     	}
+
     	
     }
 
