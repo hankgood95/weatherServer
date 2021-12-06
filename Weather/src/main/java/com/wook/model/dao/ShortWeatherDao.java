@@ -130,6 +130,9 @@ public class ShortWeatherDao implements Runnable{
     		if(count >= 2 ) 
     			break;
     		if(item.getCategory().equals("TMX")) {
+    			String tempKey = item.getFcstDate()+item.getNx()+item.getNy();
+    			
+    			temp.setTempKey(tempKey);
     			temp.setBestMax(item.getFcstValue());
     			temp.setNx(item.getNx());
     			temp.setNy(item.getNy());
