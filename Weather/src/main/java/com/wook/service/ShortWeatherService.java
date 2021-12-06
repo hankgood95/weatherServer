@@ -75,7 +75,7 @@ public class ShortWeatherService {
 			}
 			
 			CountDownLatch cdl = new CountDownLatch(fifty);
-			ExecutorService exs = Executors.newFixedThreadPool(25);
+			ExecutorService exs = Executors.newFixedThreadPool(50);
 			
 			CompletionHandler<Temperature,Void> callBack = 
 					new CompletionHandler<Temperature,Void>(){
