@@ -76,13 +76,13 @@ public class Application implements CommandLineRunner{
         logger.info("-------------------");
         
 //        //List에 담긴 온도 DB에 저장
-//        for(int i = 0;i<temperList.size();i++) {
-//        	Temperature temp = temperList.get(i);
-//        	temp.setTempKey(i+temp.getDate());
-//        	ts.saveTemp(temp);
-//        }
-//        
-//        logger.info("DB Store Success");
+        for(int i = 0;i<temperList.size();i++) {
+        	Temperature temp = temperList.get(i);
+        	temp.setTempKey(i+temp.getDate());
+        	ts.saveTemp(temp);
+        }
+        
+        logger.info("DB Store Success");
     }
     
 }
