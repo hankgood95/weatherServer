@@ -53,7 +53,7 @@ public class Application implements CommandLineRunner{
         String pageNo = "1";
         String numOfRows = "290";
         String dataType = "JSON";
-        String base_date = "20211206";
+        String base_date = "20211207";
         String base_time = "2300";
 
         swrList = new ArrayList<>();
@@ -78,7 +78,6 @@ public class Application implements CommandLineRunner{
 //        //List에 담긴 온도 DB에 저장
         for(int i = 0;i<temperList.size();i++) {
         	Temperature temp = temperList.get(i);
-        	temp.setTempKey(i+temp.getDate());
         	ts.saveTemp(temp);
         }
         
