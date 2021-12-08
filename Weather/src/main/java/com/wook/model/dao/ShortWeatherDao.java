@@ -72,7 +72,6 @@ public class ShortWeatherDao implements Runnable{
 	@Override
 	public void run() {
 		//여기서 API를 호출할거임
-		
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(BASE_URL); //UriBuilder를 생성하는 옵션을 설정하는 DefaultUriBuilderFactory 인스턴스 생성
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY); //encoding 모드 설정
 
