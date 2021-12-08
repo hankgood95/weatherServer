@@ -1,16 +1,20 @@
 package com.wook.model.dto;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class ShortWeatherReq {
 	
     private String serviceKey;
-    private String pageNo;
-    private String numOfRows;
-    private String dataType;
+    private final String pageNo = "1";
+    private final String numOfRows = "290";
+    private final String dataType = "JSON";
     private String base_date;
-    private String base_time;
+    private final String base_time="2300";
     private int nx;
     private int ny;
     
@@ -20,23 +24,17 @@ public class ShortWeatherReq {
 		super();
 	}
 
-	public ShortWeatherReq(String serviceKey, String pageNo, String numOfRows, String dataType, String base_date,
-			String base_time, int nx, int ny) {
+	public ShortWeatherReq(String serviceKey, int nx, int ny) {
 		super();
 		this.serviceKey = serviceKey;
-		this.pageNo = pageNo;
-		this.numOfRows = numOfRows;
-		this.dataType = dataType;
-		this.base_date = base_date;
-		this.base_time = base_time;
 		this.nx = nx;
 		this.ny = ny;
 	}
-
+	
 	public String getServiceKey() {
 		return serviceKey;
 	}
-
+	
 	public void setServiceKey(String serviceKey) {
 		this.serviceKey = serviceKey;
 	}
@@ -45,40 +43,20 @@ public class ShortWeatherReq {
 		return pageNo;
 	}
 
-	public void setPageNo(String pageNo) {
-		this.pageNo = pageNo;
-	}
-
 	public String getNumOfRows() {
 		return numOfRows;
-	}
-
-	public void setNumOfRows(String numOfRows) {
-		this.numOfRows = numOfRows;
 	}
 
 	public String getDataType() {
 		return dataType;
 	}
 
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
-	}
-
 	public String getBase_date() {
 		return base_date;
 	}
 
-	public void setBase_date(String base_date) {
-		this.base_date = base_date;
-	}
-
 	public String getBase_time() {
 		return base_time;
-	}
-
-	public void setBase_time(String base_time) {
-		this.base_time = base_time;
 	}
 
 	public int getNx() {
@@ -103,4 +81,18 @@ public class ShortWeatherReq {
 				+ ", dataType=" + dataType + ", base_date=" + base_date + ", base_time=" + base_time + ", nx=" + nx
 				+ ", ny=" + ny + "]";
 	}
+
+	//현재 날짜를 구해와서 baseDate에 저장하는 방식
+	public void setBaseDate() {
+		// TODO Auto-generated method stub
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Calendar calendar = Calendar.getInstance();
+		
+		Date date = calendar.getTime();
+		base_date = sdf.format(date);
+		
+	}
+
+
 }
