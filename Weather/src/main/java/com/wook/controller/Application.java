@@ -51,12 +51,7 @@ public class Application implements CommandLineRunner{
 	
     @Override
     public void run( String... args ) throws Exception {
-    	startService();
-    }
-	
-	@Scheduled(cron="0 50 23 * * *")
-	public void startService() throws InterruptedException {
-		
+    	
         swrList = new ArrayList<>();
         
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
@@ -87,7 +82,6 @@ public class Application implements CommandLineRunner{
         }
         
         logger.info("DB Store Success");
-		
-	}
+    }
     
 }
