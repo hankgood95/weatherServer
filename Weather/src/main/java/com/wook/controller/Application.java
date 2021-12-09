@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.wook.model.dto.ApiKey;
 import com.wook.model.dto.GeoInfo;
@@ -18,6 +20,7 @@ import com.wook.service.GeoService;
 import com.wook.service.ShortWeatherService;
 import com.wook.service.TempService;
 
+@EnableScheduling
 @SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
 public class Application implements CommandLineRunner{
 
@@ -46,6 +49,7 @@ public class Application implements CommandLineRunner{
 		SpringApplication.run(Application.class, args);
 	}
 	
+	@Scheduled(cron="0 45 23 * * *")
     @Override
     public void run( String... args ) throws Exception {
     	
@@ -64,7 +68,7 @@ public class Application implements CommandLineRunner{
         //위 객체를 가지고 이제 API를 호출할수 있게 Service에게 전해줘야 함
         sws.setSwrList(swrList);
         
-        temperList = sws.callSW();
+        temperList = sws.callSW(); // API 통신 Service 호출
         
         logger.info("-------------------");
         
