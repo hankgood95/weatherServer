@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wook.controller.Application;
@@ -51,6 +52,7 @@ public class ShortWeatherService {
 	}
 
 	//여기서 이제 전달받은 GeoInfo List를 가지고 API를 호출하는 부분
+	@Scheduled(cron="0 55 23 * * *")
 	public List<Temperature> callSW() throws InterruptedException {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
