@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import com.wook.controller.Application;
+import com.wook.controller.ShortWeatherController;
 import com.wook.model.dto.Item;
 import com.wook.model.dto.Items;
 import com.wook.model.dto.ShortWeatherReq;
@@ -36,7 +36,7 @@ public class ShortWeatherDao implements Runnable{
 	private Temperature temp;
 	private CompletionHandler<Temperature,Void> callBack;
 	
-	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
+	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
 	public ShortWeatherDao(SweatherRootRes result,Temperature temp) {
