@@ -6,11 +6,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
 
 import com.wook.model.dto.ApiKey;
 import com.wook.model.dto.GeoInfo;
@@ -20,9 +18,9 @@ import com.wook.service.GeoService;
 import com.wook.service.ShortWeatherService;
 import com.wook.service.TempService;
 
-@EnableScheduling
+@Controller
 @SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
-public class Application implements CommandLineRunner{
+public class ShortWeatherController{
 
 	private final ApiKey APK;
 	
@@ -34,10 +32,10 @@ public class Application implements CommandLineRunner{
 	private TempService ts; //To save TempService
 	
 	
-	private Logger logger = LoggerFactory.getLogger(Application.class); //로그를 찍기 위해서 사용하는 Class
+	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public Application(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr, TempService ts) {
+	public ShortWeatherController(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr, TempService ts) {
 		this.APK = apk;
 		this.gs = gs;
 		this.sws = sws;
@@ -45,13 +43,8 @@ public class Application implements CommandLineRunner{
 		this.ts = ts;
 	}
 	
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-	
-    @Override
-    public void run( String... args ) throws Exception {
-    	
+	@Scheduled(cron="0 3 23 * * *")
+	public void callAPi() throws InterruptedException {
         swrList = new ArrayList<>();
         
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
@@ -82,6 +75,8 @@ public class Application implements CommandLineRunner{
         }
         
         logger.info("DB Store Success");
-    }
+	}
+	
+
     
 }

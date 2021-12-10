@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.wook.controller.Application;
+import com.wook.controller.ShortWeatherController;
 import com.wook.model.dao.ShortWeatherDao;
 import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
@@ -28,7 +28,7 @@ public class ShortWeatherService {
 	private List<ShortWeatherReq> swrList;
 	private List<GeoInfo> geoList;
 	
-	private Logger logger = (Logger) LoggerFactory.getLogger(Application.class);
+	private Logger logger = (Logger) LoggerFactory.getLogger(ShortWeatherController.class);
 	
 	
 	public ShortWeatherService(ShortWeatherDao swd) {
@@ -52,7 +52,6 @@ public class ShortWeatherService {
 	}
 
 	//여기서 이제 전달받은 GeoInfo List를 가지고 API를 호출하는 부분
-	@Scheduled(cron="0 55 23 * * *")
 	public List<Temperature> callSW() throws InterruptedException {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
