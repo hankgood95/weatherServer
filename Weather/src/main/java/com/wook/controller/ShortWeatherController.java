@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
@@ -19,7 +18,6 @@ import com.wook.service.ShortWeatherService;
 import com.wook.service.TempService;
 
 @Controller
-@SpringBootApplication(scanBasePackages= {"com.wook.model","com.wook.weather","com.wook.service"})
 public class ShortWeatherController{
 
 	private final ApiKey APK;
@@ -43,8 +41,9 @@ public class ShortWeatherController{
 		this.ts = ts;
 	}
 	
-	@Scheduled(cron="0 3 23 * * *")
+	@Scheduled(cron="0 15 23 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException {
+
         swrList = new ArrayList<>();
         
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
