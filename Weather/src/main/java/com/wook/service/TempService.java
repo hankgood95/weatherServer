@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Service;
 
 import com.wook.model.dao.TempDao;
+import com.wook.model.dto.TempRequest;
 import com.wook.model.dto.Temperature;
 
 @Service
@@ -12,7 +13,7 @@ public class TempService {
 
 	private TempDao td;
 	
-	public TempService(TempDao td) {
+	public TempService(TempDao td, TempRequest tr) {
 		super();
 		this.td = td;
 	}
@@ -20,6 +21,10 @@ public class TempService {
 	public int saveTemp(Temperature temp) {
 		// TODO Auto-generated method stub
 		return td.insertTemp(temp);
+	}
+	
+	public Temperature getTemp(TempRequest tr) {
+		return td.getTemp(tr);
 	}
 
 }
