@@ -135,7 +135,7 @@ public class ShortWeatherDao implements Runnable{
     			temp.setBestMax(item.getFcstValue());
     			temp.setNx(item.getNx());
     			temp.setNy(item.getNy());
-    			temp.setDate(item.getBaseDate());
+    			temp.setDate(item.getFcstDate());
     			count++;
     			
     		}

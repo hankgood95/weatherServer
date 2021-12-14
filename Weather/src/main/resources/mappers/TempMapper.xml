@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wook.model.dao.TempDao">
+
+	<!-- Temperature resultMap -->
+	<resultMap id="getTempResult" type="Temperature">
+		<result column="TEMP_KEY" property="tempKey"/>
+		<result column="MAX_TEMP" property="bestMax"/>
+		<result column="MIN_TEMP" property="bestMin"/>
+		<result column="BASE_DATE" property="date"/>
+		<result column="X" property="nx"/>
+		<result column="y" property="ny"/>
+	</resultMap>
+	
 	<insert id="insertTemp" parameterType="Temperature">
 		INSERT INTO MAX_MIN_TEMP (TEMP_KEY, MAX_TEMP, MIN_TEMP, BASE_DATE, X, Y) VALUES (#{tempKey},#{bestMax},#{bestMin},#{date},#{nx},#{ny})
 	</insert>
 	
-	<select id="getTemp" resultType="Temperature" parameterType="TempRequest">
-         select * from max_min_temp where temp_key=#{tempKey}
+	<select id="getTemp" resultMap="getTempResult" parameterType="TempRequest">
+         SELECT * FROM MAX_MIN_TEMP WHERE TEMP_KEY=#{tempKey}
     </select>
 </mapper>
