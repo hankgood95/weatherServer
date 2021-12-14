@@ -1,8 +1,5 @@
 package com.wook.model.dto;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class TempRequest {
 
 	private int x;

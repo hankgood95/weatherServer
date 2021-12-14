@@ -5,16 +5,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wook.model.dto.TempRequest;
+import com.wook.model.dto.Temperature;
+import com.wook.service.TempService;
 
 @RestController
 public class ReadWeatherController {
 
-	private TempRequest tr;
 
-	public ReadWeatherController(TempRequest tr) {
-		super();
-		this.tr = tr;
+	private TempService ts;
+	
+	public ReadWeatherController(TempService ts) {
+		this.ts = ts;
 	}
+
 
 
 	//이제 여기다가 API를 만들면됨
@@ -26,9 +29,11 @@ public class ReadWeatherController {
 		
 		String tempKey = baseDate+String.valueOf(x)+String.valueOf(y);
 		
-		tr = new TempRequest(x,y,baseDate,tempKey);
+		TempRequest tr = new TempRequest(x,y,baseDate,tempKey);
 		
-		return tr.toString();
+		Temperature temp = ts.getTemp(tr);
+		
+		return temp.toString();
 	}
 	
 }
