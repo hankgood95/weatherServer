@@ -28,9 +28,7 @@ public class TempService {
 	}
 	
 	public Temperature getTemp(TempRequest tr) {
-		logger.info(tr.toString());
 		Temperature temp = td.getTemp(tr);
-		logger.info(temp.toString());
 		return temp;
 	}
 
