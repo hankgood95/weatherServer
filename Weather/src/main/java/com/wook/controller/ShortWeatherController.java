@@ -41,7 +41,7 @@ public class ShortWeatherController{
 		this.ts = ts;
 	}
 	
-	@Scheduled(cron="0 17 23 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 30 23 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException {
 
         swrList = new ArrayList<>();

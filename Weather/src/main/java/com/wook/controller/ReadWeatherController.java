@@ -21,10 +21,10 @@ public class ReadWeatherController {
 
 	//이제 여기다가 API를 만들면됨
 	@GetMapping("/maxmintemp/{tempKey}")
-	public String readWeather(@PathVariable("tempKey")String tempKey) {
+	public Temperature readWeather(@PathVariable("tempKey")String tempKey) {
 		
 		Temperature temp = ts.getTemp(tempKey);
-		return temp.toString();
+		return temp;
 	}
 	
 }
