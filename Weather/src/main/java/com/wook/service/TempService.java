@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.wook.controller.ShortWeatherController;
 import com.wook.model.dao.TempDao;
-import com.wook.model.dto.TempRequest;
 import com.wook.model.dto.Temperature;
 
 @Service
@@ -27,8 +26,8 @@ public class TempService {
 		return td.insertTemp(temp);
 	}
 	
-	public Temperature getTemp(TempRequest tr) {
-		Temperature temp = td.getTemp(tr);
+	public Temperature getTemp(String tempKey) {
+		Temperature temp = td.getTemp(tempKey);
 		return temp;
 	}
 
