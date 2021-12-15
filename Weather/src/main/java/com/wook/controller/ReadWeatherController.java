@@ -24,7 +24,7 @@ public class ReadWeatherController {
 	public Temperature readWeather(@PathVariable("tempKey")String tempKey) {
 		
 		Temperature temp = ts.getTemp(tempKey);
-		return temp;
+		return temp; //temp를 json 형식으로 반환
 	}
 	
 }
