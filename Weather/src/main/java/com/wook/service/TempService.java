@@ -21,14 +21,16 @@ public class TempService {
 		this.td = td;
 	}
 	
+	//API로부터 받아온 온도를 저장하는 부분
 	public int saveTemp(Temperature temp) {
 		// TODO Auto-generated method stub
 		return td.insertTemp(temp);
 	}
 	
+	//API를 통해서 온도를 조회하는 부분
 	public Temperature getTemp(String tempKey) {
 		Temperature temp = td.getTemp(tempKey);
-		return temp;
+		return temp; //json으로 return
 	}
 
 }
