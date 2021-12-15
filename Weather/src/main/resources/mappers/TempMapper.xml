@@ -16,7 +16,7 @@
 		INSERT INTO MAX_MIN_TEMP (TEMP_KEY, MAX_TEMP, MIN_TEMP, BASE_DATE, X, Y) VALUES (#{tempKey},#{bestMax},#{bestMin},#{date},#{nx},#{ny})
 	</insert>
 	
-	<select id="getTemp" resultMap="getTempResult" parameterType="TempRequest">
+	<select id="getTemp" resultMap="getTempResult" parameterType="String">
          SELECT * FROM MAX_MIN_TEMP WHERE TEMP_KEY=#{tempKey}
     </select>
 </mapper>
