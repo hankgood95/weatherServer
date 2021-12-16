@@ -35,7 +35,7 @@ public class ReadWeatherController {
 		//내가 만들 응답코드
 		//1 . 401 응답코드 - 서비스키 오류
 		//2. 204 응답코드 - 데이터 없는 오류
-		//3. 200 응답코드 - 성공 오류
+		//3. 200 응답코드 - 성공
 		
 		if(temp== null) { //해당 데이터로 받은 내용이 없다면
 			mmr = new MaxMinResponse(204,"No Data"); //204 응답코드를 보내준다.
