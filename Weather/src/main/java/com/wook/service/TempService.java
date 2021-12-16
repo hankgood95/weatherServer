@@ -30,7 +30,7 @@ public class TempService {
 	//API를 통해서 온도를 조회하는 부분
 	public Temperature getTemp(String tempKey) {
 		Temperature temp = td.getTemp(tempKey);
-		return temp; //json으로 return
+		return temp;
 	}
 
 }
