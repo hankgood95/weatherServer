@@ -41,4 +41,4 @@ secrets.yml
 .gradletasknamecache
 .sts4-cache
 #Secret Information
-application-SECRET.properties
+application-config.properties
