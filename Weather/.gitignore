@@ -41,4 +41,4 @@ secrets.yml
 .gradletasknamecache
 .sts4-cache
 #API KEY file
-application-API-KEY.properties
+application-SECRET.properties
