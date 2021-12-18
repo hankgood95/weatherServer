@@ -10,7 +10,6 @@ import com.wook.model.dao.TempDao;
 import com.wook.model.dto.Temperature;
 
 @Service
-@MapperScan("com.wook.model.dao")
 public class TempService {
 
 	private TempDao td;
