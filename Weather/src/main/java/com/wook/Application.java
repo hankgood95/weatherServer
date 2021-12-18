@@ -1,11 +1,11 @@
-package com.wook.run;
+package com.wook;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
-@SpringBootApplication(scanBasePackages= {"com.wook.controller","com.wook.model","com.wook.service"})
+@SpringBootApplication
 public class Application {
 
 	public static void main(String[] args) {
