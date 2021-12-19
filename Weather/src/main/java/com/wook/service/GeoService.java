@@ -9,7 +9,6 @@ import com.wook.model.dao.GeoDao;
 import com.wook.model.dto.GeoInfo;
 
 @Service
-@MapperScan("com.wook.model.dao")
 public class GeoService {
 	private GeoDao geodao;
 	
