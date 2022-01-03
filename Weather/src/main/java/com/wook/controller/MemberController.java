@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wook.model.dto.MemberResponse;
 import com.wook.model.dto.TempMember;
 
 @RestController
@@ -15,6 +16,8 @@ public class MemberController {
 	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
 	
 	//내가 MemberController에서 할것은
-	//1. 관리자의 서비스키와 회원정보를 받으면 회원의 서비스키를 발급해주고 DB에 저장하는 일을 할것이다.
-	//이건 그램에서 올린것임
+	//1. 회원의 이메일을 받아오는 PostReqeust를 만들면 된다.
+	public MemberResponse insertMember() {
+		return null;
+	}
 }
