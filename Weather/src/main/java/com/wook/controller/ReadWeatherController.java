@@ -23,8 +23,6 @@ public class ReadWeatherController {
 		this.ts = ts;
 	}
 
-
-
 	//이제 여기다가 API를 만들면됨
 	@GetMapping("/maxmintemp/{tempKey}")
 	public MaxMinResponse readWeather(@PathVariable("tempKey")String tempKey, @RequestHeader String serviceKey) {
