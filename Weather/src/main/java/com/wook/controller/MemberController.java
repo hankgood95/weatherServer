@@ -38,7 +38,8 @@ public class MemberController {
 			logger.info("인증 실패");
 			mr = new MemberResponse(401,"Authorization Failed",null);
 		}else {
-			logger.info("확인 완료");
+			//여기서부터는 이제 입력받은 이메일로 서비스키를 생성해줘야 함
+			
 		}
 
 		return mr;
