@@ -17,7 +17,7 @@ public class MemberService {
 	
 	//매니저의 키를 확인하는 부분
 	public TempMember checkManager(String managerKey) {
-		return null;
+		return md.checkManager(managerKey);
 	}
 	
 }
