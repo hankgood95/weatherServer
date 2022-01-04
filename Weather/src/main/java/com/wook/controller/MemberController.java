@@ -30,8 +30,17 @@ public class MemberController {
 	@PostMapping("maxmintemp/member")
 	public MemberResponse insertMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
 		
+		MemberResponse mr = null;
+		//관리자의 키가 맞는지 확인하기
 		TempMember manager = ms.checkManager(managerKey);
 		
-		return null;
+		if(manager == null) { //해당 키로 관리자가 없다면 진입
+			logger.info("인증 실패");
+			mr = new MemberResponse(401,"Authorization Failed",null);
+		}else {
+			logger.info("확인 완료");
+		}
+
+		return mr;
 	}
 }
