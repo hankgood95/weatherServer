@@ -24,8 +24,6 @@ public class MemberController {
 		this.ms = ms;
 	}
 
-	// 내가 MemberController에서 할것은
-
 	// Member 입력하는 부분
 	@PostMapping("maxmintemp/member")
 	public MemberResponse insertMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
@@ -61,8 +59,7 @@ public class MemberController {
 			return new MemberResponse(401, "Authorization Failed : Wrong ServiceKey", null);
 		} else {
 			//관리자키가 맞으니까 진입
-			//여기서 이제 이메일로 serviceKey 조회하면 돼
-			logger.info(tm.getEmail());
+			//이메일로 서비스키 조회후 전달
 			return new MemberResponse(200,"Success",ms.getServiceKey(tm.getEmail()));
 		}
 	}
