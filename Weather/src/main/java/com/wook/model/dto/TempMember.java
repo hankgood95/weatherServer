@@ -7,7 +7,7 @@ public class TempMember {
 	
 	public TempMember() {}
 	
-	public TempMember(String email, String managerKey, String serviceKey) {
+	public TempMember(String email, String serviceKey) {
 		super();
 		this.email = email;
 		this.serviceKey = serviceKey;

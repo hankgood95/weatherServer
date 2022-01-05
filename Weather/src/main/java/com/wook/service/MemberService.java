@@ -20,4 +20,13 @@ public class MemberService {
 		return md.checkManager(managerKey);
 	}
 	
+	//이메일 중복 체크하는 부분
+	public int checkEmail(String email) {
+		return md.checkEmail(email);
+	}
+	
+	//이메일과 서비스키 입력하는 부분
+	public int insertMember(TempMember tm) {
+		return md.insertMember(tm);
+	}
 }
