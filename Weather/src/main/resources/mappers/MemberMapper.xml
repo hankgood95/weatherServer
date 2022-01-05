@@ -4,7 +4,7 @@
 	
 	<!-- 관리자 서비스키 확인하는 부분 -->
     <select id="checkManager" resultType="TempMember" parameterType="String">
-         select * from member_servicekey where service_key=#{managerKey}
+         select count(*) from member_servicekey where service_key=#{managerKey}
     </select>
     
     <!-- 이메일 중복 확인하는 부분 -->
@@ -17,4 +17,8 @@
 		INSERT INTO member_servicekey (email, service_key) VALUES (#{email},#{serviceKey})
 	</insert>
     
+    <!-- 이메일로 서비스키 가져오는 부분 -->
+    <select id="getServiceKey" resultType="TempMember" parameterType="String">
+         select * from member_servicekey where email=#{email}
+    </select>
 </mapper>

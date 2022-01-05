@@ -16,7 +16,7 @@ public class MemberService {
 	}
 	
 	//매니저의 키를 확인하는 부분
-	public TempMember checkManager(String managerKey) {
+	public int checkManager(String managerKey) {
 		return md.checkManager(managerKey);
 	}
 	
@@ -28,5 +28,9 @@ public class MemberService {
 	//이메일과 서비스키 입력하는 부분
 	public int insertMember(TempMember tm) {
 		return md.insertMember(tm);
+	}
+	
+	public TempMember getServiceKey(String email) {
+		return md.getServiceKey(email);
 	}
 }
