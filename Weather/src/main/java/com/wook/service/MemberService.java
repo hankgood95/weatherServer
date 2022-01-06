@@ -16,8 +16,8 @@ public class MemberService {
 	}
 	
 	//매니저의 키를 확인하는 부분
-	public int checkManager(String managerKey) {
-		return md.checkManager(managerKey);
+	public int checkServiceKey(String serviceKey) {
+		return md.checkServiceKey(serviceKey);
 	}
 	
 	//이메일 중복 체크하는 부분
@@ -30,6 +30,7 @@ public class MemberService {
 		return md.insertMember(tm);
 	}
 	
+	//이메일로 서비스키 조회하는 부분
 	public TempMember getServiceKey(String email) {
 		return md.getServiceKey(email);
 	}

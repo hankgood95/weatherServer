@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wook.model.dto.ApiResponse;
 import com.wook.model.dto.MaxMinResponse;
 import com.wook.model.dto.Temperature;
 import com.wook.service.TempService;
@@ -17,7 +18,6 @@ public class ReadWeatherController {
 
 	private TempService ts;
 	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
-	private MaxMinResponse mmr;
 	
 	public ReadWeatherController(TempService ts) {
 		this.ts = ts;
@@ -25,7 +25,7 @@ public class ReadWeatherController {
 
 	//이제 여기다가 API를 만들면됨
 	@GetMapping("/maxmintemp/{tempKey}")
-	public MaxMinResponse readWeather(@PathVariable("tempKey")String tempKey, @RequestHeader String serviceKey) {
+	public ApiResponse readWeather(@PathVariable("tempKey")String tempKey, @RequestHeader String serviceKey) {
 		
 		logger.info(serviceKey);
 		Temperature temp = ts.getTemp(tempKey);
@@ -38,12 +38,10 @@ public class ReadWeatherController {
 		//서비스 키를 어떻게 발급을 해줄것이냐 이게 관건이네 보니깐
 		
 		if(temp== null) { //해당 데이터로 받은 내용이 없다면
-			mmr = new MaxMinResponse(204,"No Data"); //204 응답코드를 보내준다.
+			return new ApiResponse(204,"No Data",null); //204 응답코드를 보내준다.
 		}else {
-			mmr = new MaxMinResponse(200,"Success",temp);
+			return new ApiResponse(200,"Success",temp);
 		}
-		
-		return mmr; //temp를 json 형식으로 반환
 	}
 	
 }
