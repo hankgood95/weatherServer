@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wook.model.dto.ApiResponse;
-import com.wook.model.dto.MaxMinResponse;
 import com.wook.model.dto.Temperature;
 import com.wook.service.TempService;
 
