@@ -2,7 +2,6 @@ package com.wook.model.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.wook.model.dto.MemberResponse;
 import com.wook.model.dto.TempMember;
 
 @Mapper

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wook.model.dto.ApiResponse;
-import com.wook.model.dto.MemberResponse;
 import com.wook.model.dto.TempMember;
 import com.wook.security.Encryption;
 import com.wook.service.MemberService;
