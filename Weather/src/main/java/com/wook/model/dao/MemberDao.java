@@ -8,7 +8,7 @@ import com.wook.model.dto.TempMember;
 @Mapper
 public interface MemberDao {
 	//관리자 서비스키를 확인하는 부분
-	int checkManager(String managerKey);
+	int checkServiceKey(String serviceKey);
 	
 	//이메일 중복 체크하는 부분
 	int checkEmail(String email);

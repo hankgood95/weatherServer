@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wook.model.dao.MemberDao">
 	
-	<!-- 관리자 서비스키 확인하는 부분 -->
-    <select id="checkManager" resultType="Integer" parameterType="String">
-         select count(*) from member_servicekey where service_key=#{managerKey}
+	<!-- 서비스키 확인하는 부분 -->
+    <select id="checkServiceKey" resultType="Integer" parameterType="String">
+         select count(*) from member_servicekey where service_key=#{serviceKey}
     </select>
     
     <!-- 이메일 중복 확인하는 부분 -->

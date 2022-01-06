@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wook.model.dto.ApiResponse;
 import com.wook.model.dto.MemberResponse;
 import com.wook.model.dto.TempMember;
 import com.wook.security.Encryption;
@@ -26,15 +27,15 @@ public class MemberController {
 
 	// Member 입력하는 부분
 	@PostMapping("maxmintemp/member")
-	public MemberResponse insertMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
+	public ApiResponse insertMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
 
-		if (ms.checkManager(managerKey) < 1) { // 해당 키로 관리자가 없다면 진입 즉 관리자 서비스키 틀렸다면 진입
+		if (ms.checkServiceKey(managerKey) < 1) { // 해당 키로 관리자가 없다면 진입 즉 관리자 서비스키 틀렸다면 진입
 			logger.info("인증 실패");
-			return new MemberResponse(401, "Authorization Failed : Wrong ServiceKey", null);
+			return new ApiResponse(401, "Authorization Failed : Wrong ServiceKey", null);
 		} else {
 			// 여기서부터는 이제 입력받은 이메일로 서비스키를 생성해줘야 하는데 그보다 더 우선인것은 이메일 중복체크를 해줘야 함
 			if (ms.checkEmail(tm.getEmail()) > 0) { // 이미 존재하는 이메일이라면 진입
-				return new MemberResponse(409, "Member Insert Fail : Email already exist", null);
+				return new ApiResponse(409, "Member Insert Fail : Email already exist", null);
 			} else {
 				Encryption sha = new Encryption(); // 보안 클래스 인스턴스 생성
 				String memberServiceKey = sha.encryption(tm.getEmail()); // sha256으로 변환
@@ -42,25 +43,24 @@ public class MemberController {
 
 				if (ms.insertMember(tm) == 1) {
 					//회원 입력 성공했을떄
-					return new MemberResponse(200, "Member Insert Success", tm);
+					return new ApiResponse(200, "Member Insert Success", tm);
 				} else {
 					//회원 입력 실패했을떄
-					return new MemberResponse(500, "Member Insert Failed : Server Error", null);
+					return new ApiResponse(500, "Member Insert Failed : Server Error", null);
 				}
 			}
 		}
 	}
 	
 	@GetMapping("maxmintemp/member")
-	public MemberResponse getMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
+	public ApiResponse getMember(@RequestHeader String managerKey, @RequestBody TempMember tm) {
 		
-		if (ms.checkManager(managerKey) < 1) { // 해당 키로 관리자가 없다면 진입 즉 관리자 서비스키 틀렸다면 진입
+		if (ms.checkServiceKey(managerKey) < 1) { // 해당 키로 관리자가 없다면 진입 즉 관리자 서비스키 틀렸다면 진입
 			logger.info("인증 실패");
-			return new MemberResponse(401, "Authorization Failed : Wrong ServiceKey", null);
+			return new ApiResponse(401, "Authorization Failed : Wrong ServiceKey", null);
 		} else {
-			//관리자키가 맞으니까 진입
 			//이메일로 서비스키 조회후 전달
-			return new MemberResponse(200,"Success",ms.getServiceKey(tm.getEmail()));
+			return new ApiResponse(200,"Success",ms.getServiceKey(tm.getEmail()));
 		}
 	}
 }
