@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wook.model.dao.RegionCodeDao">
 
-<!-- resultMap을 만들어야함 -->
+	<!-- 구역코드 select 문에 대한 resultMap -->
+	<resultMap id="RegionCodeResultMap" type="RegionCode">
+		<result column="address" property="address"/>
+		<result column="temp_code" property="regionCode"/>
+		<result column="fc_code" property="regionCode"/>
+	</resultMap>
 
+	<select id="getRegionCode" resultMap="RegionCodeResultMap" parameterType="RegionCode">
+		<if test="type == 1">
+			select address, temp_code from region_code where address = #{address}
+		</if>
+		<if test="type==2">
+			select address, fc_code from region_code where address = #{address}
+		</if>
+	</select>
 </mapper>

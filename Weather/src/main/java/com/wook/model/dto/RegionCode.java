@@ -3,16 +3,16 @@ package com.wook.model.dto;
 public class RegionCode {
 
 	private String address;
-	private String regionTempCode;
+	private String regionCode;
 	private int type;
 	
 	public RegionCode() {}
 	
 	
-	public RegionCode(String address, String regionTempCode, int type) {
+	public RegionCode(String address, String regionCode, int type) {
 		super();
 		this.address = address;
-		this.regionTempCode = regionTempCode;
+		this.regionCode = regionCode;
 		this.type = type;
 	}
 
@@ -22,11 +22,11 @@ public class RegionCode {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getRegionTempCode() {
-		return regionTempCode;
+	public String getRegionCode() {
+		return regionCode;
 	}
-	public void setRegionTempCode(String regionTempCode) {
-		this.regionTempCode = regionTempCode;
+	public void setRegionCode(String regionCode) {
+		this.regionCode = regionCode;
 	}
 
 	public int getType() {
@@ -39,7 +39,7 @@ public class RegionCode {
 
 	@Override
 	public String toString() {
-		return "RegionCode [address=" + address + ", regionTempCode=" + regionTempCode + ", type=" + type + "]";
+		return "RegionCode [address=" + address + ", regionCode=" + regionCode + ", type=" + type + "]";
 	}
 	
 	
