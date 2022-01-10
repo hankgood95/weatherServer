@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ShortWeatherReq {
 	
     private String serviceKey;
-    private final String pageNo = "1";
+    private String pageNo;
     private final String numOfRows = "290";
     private final String dataType = "JSON";
     private String base_date;
@@ -23,14 +23,17 @@ public class ShortWeatherReq {
 	public ShortWeatherReq() {
 		super();
 	}
-
-	public ShortWeatherReq(String serviceKey, int nx, int ny) {
+	
+	public ShortWeatherReq(String serviceKey, String pageNo, int nx, int ny) {
 		super();
 		this.serviceKey = serviceKey;
+		this.pageNo = pageNo;
 		this.nx = nx;
 		this.ny = ny;
 	}
-	
+
+
+
 	public String getServiceKey() {
 		return serviceKey;
 	}

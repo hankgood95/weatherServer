@@ -13,7 +13,7 @@
 		<if test="type == 1">
 			select address, temp_code from region_code where address = #{address}
 		</if>
-		<if test="type==2">
+		<if test="type== 2">
 			select address, fc_code from region_code where address = #{address}
 		</if>
 	</select>
