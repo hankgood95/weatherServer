@@ -46,9 +46,21 @@ public class ShortWeatherController{
 
         swrList = new ArrayList<>();
         List<GeoInfo> giList = gs.getGeoXY();
+        
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
         for(GeoInfo gi : giList) {
+        	
         	swr = new ShortWeatherReq(APK.getApiKey(),"1",gi.getX(),gi.getY());
+        	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
+        	swr.setNx(gi.getX()); //x좌표값 저장
+        	swr.setNy(gi.getY()); //y좌표값 저장
+        	
+        	swrList.add(swr); //list에 swr 추가
+        }
+        
+        for(GeoInfo gi : giList) {
+        	
+        	swr = new ShortWeatherReq(APK.getApiKey(),"2",gi.getX(),gi.getY());
         	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
         	swr.setNx(gi.getX()); //x좌표값 저장
         	swr.setNy(gi.getY()); //y좌표값 저장
@@ -74,8 +86,5 @@ public class ShortWeatherController{
         }
         
         logger.info("DB Store Success");
-	}
-	
-
-    
+	}    
 }
