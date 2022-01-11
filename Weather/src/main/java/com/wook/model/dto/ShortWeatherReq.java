@@ -1,6 +1,7 @@
 package com.wook.model.dto;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -92,8 +93,18 @@ public class ShortWeatherReq {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		Calendar calendar = Calendar.getInstance();
 		
-		Date date = calendar.getTime();
-		base_date = sdf.format(date);
+		LocalTime now = LocalTime.now();
+		
+		int hour = now.getHour();
+		
+		if(hour != 23) { //현재 시간이 23시가 아니라면
+			calendar.add(Calendar.DATE, -1);
+			Date date = calendar.getTime();
+			base_date = sdf.format(date);
+		}else { //현재 시간이 23시라면
+			Date date = calendar.getTime();
+			base_date = sdf.format(date);
+		}
 		
 	}
 

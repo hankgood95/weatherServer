@@ -132,7 +132,8 @@ public class ShortWeatherDao implements Runnable{
     			String tempKey = item.getFcstDate()+item.getNx()+item.getNy();
     			
     			temp.setTempKey(tempKey);
-    			temp.setBestMax(Integer.parseInt(item.getFcstValue()));
+    			int max = Math.round(Float.parseFloat(item.getFcstValue()));
+    			temp.setBestMax(max);
     			temp.setNx(item.getNx());
     			temp.setNy(item.getNy());
     			temp.setDate(item.getFcstDate());
@@ -140,7 +141,8 @@ public class ShortWeatherDao implements Runnable{
     			
     		}
     		if(item.getCategory().equals("TMN")){
-    			temp.setBestMin(Integer.parseInt(item.getFcstValue()));
+    			int min = Math.round(Float.parseFloat(item.getFcstValue()));
+    			temp.setBestMin(min);
     			count++;
     		}
     			
