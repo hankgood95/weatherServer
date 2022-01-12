@@ -105,6 +105,8 @@ public class ShortWeatherDao implements Runnable{
     					error -> Mono.error(new RuntimeException("Server is not responding")))
                 .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
         
+        //여기서 type mismatch 되는 부분을 찾아야함
+        
         //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
         response.subscribe(res -> {
         	result.setResponse(res.getResponse());
