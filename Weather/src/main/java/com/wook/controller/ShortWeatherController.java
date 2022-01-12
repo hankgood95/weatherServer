@@ -41,8 +41,12 @@ public class ShortWeatherController{
 		this.ts = ts;
 	}
 	
-	@Scheduled(cron="0 37 5 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 30 23 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException {
+		
+		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
+		//아니라면 나에게 메일을 보내는것을 만들 예정이다.
+		//그리고 위 과정을 테스트 코드를 통해서 검증을 해볼것이다.
 
         swrList = new ArrayList<>();
         List<GeoInfo> giList = gs.getGeoXY();
