@@ -85,18 +85,14 @@ public class ShortWeatherService {
 						@Override
 						public void completed(Temperature result, Void attachment) {
 							// TODO Auto-generated method stub
-							if(result == null) {
-								System.out.println("found it");
-								System.exit(0);
-							}
 							tl.add(result); //전달받은 객체 인자를 list에 추가함
 						}
 						
-						//실패했을때
+						//API 연결 실패했을때
 						@Override
 						public void failed(Throwable exc, Void attachment) {
 							// TODO Auto-generated method stub
-							System.out.println("failed");
+							logger.info("failed");
 						}
 				
 			};
