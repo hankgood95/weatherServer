@@ -124,7 +124,7 @@ public class ShortWeatherDao implements Runnable{
             });
             
         }catch(UnsupportedMediaTypeException e){
-        	
+        	callBack.failed(e, null);
         }
 		
 	}
