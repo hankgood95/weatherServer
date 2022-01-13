@@ -93,7 +93,8 @@ public class ShortWeatherService {
 						@Override
 						public void failed(Throwable exc, Void attachment) {
 							// TODO Auto-generated method stub
-							logger.info(exc.getMessage()+" : failed");
+							logger.error("api called failed");
+							//이제 여기서 메일을 보내야함
 						}
 				
 			};
