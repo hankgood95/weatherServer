@@ -105,19 +105,26 @@ public class ShortWeatherDao implements Runnable{
     					error -> Mono.error(new RuntimeException("API not found")))
     			.onStatus(HttpStatus::is5xxServerError,
     					error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
+                .bodyToMono(SweatherRootRes.class)//Mono로 값을 받고
+                .doOnError(e -> logger.error("ERROR OCCUR!")) //에러 발생했을때 알려줌
+                .onErrorReturn(new SweatherRootRes(true));//에러 발생하면 위 객체를 return 해줌
         
         //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
         response.subscribe(res -> {
-        	result.setResponse(res.getResponse());
-        	if(result.getResponse().getBody()!= null) {
-        		getTemp(result.getResponse().getBody().getItems());
-        		logger.info(temp.toString());
-            	callBack.completed(temp, null);
-            	cdl.countDown();
+        	if(res.isError()) { //에러라면 진입
+        		callBack.failed(null, null); //callBack.failed() 호출
         	}else {
-        		logger.error("http reqeust has failed");
+	        	result.setResponse(res.getResponse()); //response 값으로 설정
+	        	if(result.getResponse().getBody()!= null) {
+	        		getTemp(result.getResponse().getBody().getItems()); //온도 구해서 세팅
+	        		logger.info(temp.toString());
+	            	callBack.completed(temp, null); //온도 값을 callBack에게 전달
+	            	cdl.countDown(); //Thread 수를 센다.
+	        	}else {
+	        		logger.error("http reqeust has failed");
+	        	}        		
         	}
+
         });
 	}
 	

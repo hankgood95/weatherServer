@@ -5,9 +5,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class SweatherRootRes {
 	private Response response;
+	private boolean error;
+	
+	public SweatherRootRes(boolean error) {
+		super();
+		this.error = error;
+	}
 
-	
-	
+
+	public boolean isError() {
+		return error;
+	}
+
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
+
 	public SweatherRootRes() {
 		super();
 	}
