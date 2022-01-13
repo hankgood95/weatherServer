@@ -93,7 +93,7 @@ public class ShortWeatherService {
 						@Override
 						public void failed(Throwable exc, Void attachment) {
 							// TODO Auto-generated method stub
-							logger.info("failed");
+							logger.info(exc.getMessage()+" : failed");
 						}
 				
 			};

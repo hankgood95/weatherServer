@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.UnsupportedMediaTypeException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
@@ -87,38 +88,44 @@ public class ShortWeatherDao implements Runnable{
         
         result = new SweatherRootRes();
         
-        Mono<SweatherRootRes> response = wc.get()
-                .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
-                        .queryParam("serviceKey", swr.getServiceKey())
-                        .queryParam("numOfRows", swr.getNumOfRows())
-                        .queryParam("pageNo", swr.getPageNo())
-                        .queryParam("dataType", swr.getDataType())
-                        .queryParam("base_date", swr.getBase_date())
-                        .queryParam("base_time", swr.getBase_time())
-                        .queryParam("nx", swr.getNx()) //지역정보
-                        .queryParam("ny", swr.getNy()) //지역정보
-                        .build()) //위 쿼리들로 uri 빌드를 하고
-                .retrieve() //http 요청하고
-    			.onStatus(HttpStatus::is4xxClientError,
-    					error -> Mono.error(new RuntimeException("API not found")))
-    			.onStatus(HttpStatus::is5xxServerError,
-    					error -> Mono.error(new RuntimeException("Server is not responding")))
-                .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
-        
         //여기서 type mismatch 되는 부분을 찾아야함
-        
-        //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
-        response.subscribe(res -> {
-        	result.setResponse(res.getResponse());
-        	if(result.getResponse().getBody()!= null) {
-        		getTemp(result.getResponse().getBody().getItems());
-        		logger.info(temp.toString());
-            	callBack.completed(temp, null);
-            	cdl.countDown();
-        	}else {
-        		logger.error("http reqeust has failed");
-        	}
-        });
+        try {
+        	
+            Mono<SweatherRootRes> response = wc.get()
+                    .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
+                            .queryParam("serviceKey", swr.getServiceKey())
+                            .queryParam("numOfRows", swr.getNumOfRows())
+                            .queryParam("pageNo", swr.getPageNo())
+                            .queryParam("dataType", swr.getDataType())
+                            .queryParam("base_date", swr.getBase_date())
+                            .queryParam("base_time", swr.getBase_time())
+                            .queryParam("nx", swr.getNx()) //지역정보
+                            .queryParam("ny", swr.getNy()) //지역정보
+                            .build()) //위 쿼리들로 uri 빌드를 하고
+                    .retrieve() //http 요청하고
+        			.onStatus(HttpStatus::is4xxClientError,
+        					error -> Mono.error(new RuntimeException("API not found")))
+        			.onStatus(HttpStatus::is5xxServerError,
+        					error -> Mono.error(new RuntimeException("Server is not responding")))
+        			.onStatus(null, null)
+                    .bodyToMono(SweatherRootRes.class);//Mono로 값을 받고
+            
+            //비동기 방식으로 약간 콜백 메소드와 같은 역할을 하는것 같다.그래서  이부분은 api 연결이 성공했을때 들어오는 부분인것 같다.
+            response.subscribe(res -> {
+            	result.setResponse(res.getResponse());
+            	if(result.getResponse().getBody()!= null) {
+            		getTemp(result.getResponse().getBody().getItems());
+            		logger.info(temp.toString());
+                	callBack.completed(temp, null);
+                	cdl.countDown();
+            	}else {
+            		logger.error("http reqeust has failed");
+            	}
+            });
+            
+        }catch(UnsupportedMediaTypeException e){
+        	callBack.failed(e, null);
+        }
 		
 	}
 	
