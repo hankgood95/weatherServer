@@ -1,5 +1,7 @@
 package com.wook.service;
 
+import static org.junit.Assert.assertThrows;
+
 import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +95,11 @@ public class ShortWeatherService {
 						@Override
 						public void failed(Throwable exc, Void attachment) {
 							// TODO Auto-generated method stub
-							logger.error("api called failed");
+							logger.error("Api called failed.");
+							logger.warn("Shutdown Thread Pool");
 							//이제 여기서 메일을 보내야함
+							exs.shutdownNow();
+							//error throw해서 이 클래스를 끝낸다.
 						}
 				
 			};
@@ -119,8 +124,6 @@ public class ShortWeatherService {
 		}
 		
 		logger.info(String.valueOf(tl.size()));
-		
-		
 		
 		return tl;
 	}

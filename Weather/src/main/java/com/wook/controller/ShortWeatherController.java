@@ -41,7 +41,7 @@ public class ShortWeatherController{
 		this.ts = ts;
 	}
 	
-	@Scheduled(cron="0 31 4 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 16 16 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
@@ -76,6 +76,10 @@ public class ShortWeatherController{
         sws.setSwrList(swrList);
         
         temperList = sws.callSW(); // API 통신 Service 호출
+        
+        if(temperList.isEmpty()) {
+        	logger.warn("TemperList is empty");
+        }
         
         logger.info("-------------------");
         
