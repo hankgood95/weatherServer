@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wook.controller.ShortWeatherController;
+import com.wook.error.ApiConnectionError;
 import com.wook.model.dao.ShortWeatherDao;
 import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
@@ -61,7 +62,7 @@ public class ShortWeatherService {
 		List<Temperature> tl = new ArrayList<>();
 		
 		int count = 0;
-		int fifty = 50; 
+		int fifty = 50;
 		
 		while(count < swrListSize) { //count가 1668보다 작으면 진입
 			
@@ -93,25 +94,30 @@ public class ShortWeatherService {
 						
 						//API 연결 실패했을때
 						@Override
-						public void failed(Throwable exc, Void attachment) {
+						public void failed(Throwable exc, Void attachment){
 							// TODO Auto-generated method stub
 							logger.error("Api called failed.");
-							logger.warn("Shutdown Thread Pool");
 							//이제 여기서 메일을 보내야함
 							exs.shutdownNow();
-							//error throw해서 이 클래스를 끝낸다.
+							cdl.countDown();
 						}
 				
 			};
 			
 
-			
+			//50개씩 threadPool 안에 있는 애들을 실행시킨다.
 			for(int i = count; i<fPlus;i++) {
 				exs.submit(new ShortWeatherDao(cdl,swrList.get(i),callBack));
 			}
 			
 			exs.shutdown();
 			cdl.await();
+			
+			if(exs.isShutdown()) {
+				logger.info("ExecutorService ShutDown");
+				break;
+			}
+			//에러를 발생하면 현재 여기를 넘어오지 못하고 있음
 			
 			int afterCall = tl.size();
 			int differ = afterCall - beforeCall;
@@ -126,5 +132,9 @@ public class ShortWeatherService {
 		logger.info(String.valueOf(tl.size()));
 		
 		return tl;
+	}
+	
+	public void throwError() throws ApiConnectionError{
+		throw new ApiConnectionError("API 호출 에러");
 	}
 }
