@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.wook.controller.ShortWeatherController;
-import com.wook.error.ApiConnectionError;
 import com.wook.model.dao.ShortWeatherDao;
 import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
@@ -132,9 +131,5 @@ public class ShortWeatherService {
 		logger.info(String.valueOf(tl.size()));
 		
 		return tl;
-	}
-	
-	public void throwError() throws ApiConnectionError{
-		throw new ApiConnectionError("API 호출 에러");
 	}
 }
