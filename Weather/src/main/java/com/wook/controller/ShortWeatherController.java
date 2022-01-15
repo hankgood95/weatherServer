@@ -14,6 +14,7 @@ import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
 import com.wook.model.dto.Temperature;
 import com.wook.service.GeoService;
+import com.wook.service.MailService;
 import com.wook.service.ShortWeatherService;
 import com.wook.service.TempService;
 
@@ -24,21 +25,22 @@ public class ShortWeatherController{
 	
 	private GeoService gs; //To get GeoService
 	private ShortWeatherService sws;
+	private TempService ts; //To save TempService
+	private MailService ms;
+	
 	private List<Temperature> temperList;
 	private List<ShortWeatherReq> swrList;
-	private ShortWeatherReq swr;
-	private TempService ts; //To save TempService
 	
 	
 	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
-	public ShortWeatherController(ApiKey apk, GeoService gs, ShortWeatherService sws,ShortWeatherReq swr, TempService ts) {
+	public ShortWeatherController(ApiKey apk, GeoService gs, ShortWeatherService sws, TempService ts, MailService ms) {
 		this.APK = apk;
 		this.gs = gs;
 		this.sws = sws;
-		this.swr = swr;
 		this.ts = ts;
+		this.ms = ms;
 	}
 	
 	@Scheduled(cron="0 27 19 * * *", zone = "Asia/Seoul")
@@ -54,7 +56,7 @@ public class ShortWeatherController{
         //DB에 저장된 GeoInfo 정보를 ShortWeatherReq List에 추가한다.
         for(GeoInfo gi : giList) {
         	
-        	swr = new ShortWeatherReq(APK.getApiKey(),"1",gi.getX(),gi.getY());
+        	ShortWeatherReq swr = new ShortWeatherReq(APK.getApiKey(),"1",gi.getX(),gi.getY());
         	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
         	swr.setNx(gi.getX()); //x좌표값 저장
         	swr.setNy(gi.getY()); //y좌표값 저장
@@ -64,7 +66,7 @@ public class ShortWeatherController{
         
         for(GeoInfo gi : giList) {
         	
-        	swr = new ShortWeatherReq(APK.getApiKey(),"2",gi.getX(),gi.getY());
+        	ShortWeatherReq swr = new ShortWeatherReq(APK.getApiKey(),"2",gi.getX(),gi.getY());
         	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
         	swr.setNx(gi.getX()); //x좌표값 저장
         	swr.setNy(gi.getY()); //y좌표값 저장
