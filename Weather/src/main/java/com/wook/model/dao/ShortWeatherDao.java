@@ -91,7 +91,7 @@ public class ShortWeatherDao implements Runnable{
         //여기서 type mismatch 되는 부분을 찾아야함
         Mono<SweatherRootRes> response = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getVilageFcst")
-                        .queryParam("serviceKey", 123)
+                        .queryParam("serviceKey", swr.getServiceKey())
                         .queryParam("numOfRows", swr.getNumOfRows())
                         .queryParam("pageNo", swr.getPageNo())
                         .queryParam("dataType", swr.getDataType())
