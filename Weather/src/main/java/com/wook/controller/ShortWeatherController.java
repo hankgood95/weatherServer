@@ -86,13 +86,12 @@ public class ShortWeatherController{
         	//이제 여기서 메일을 보내주는 서비스를 만들어서 메일 전송을 해줘야 함
         	ms.sendErrorMail();
             logger.info("-------------------");
-            
             logger.info("API Connection Fail");
+            //이제 이걸 15분 뒤에 다시 호출하는 메소드를 만들어야 함
+            
         }else {
             logger.info("-------------------");
-            
             logger.info("API ConnectionSuccess");
-            
             logger.info("-------------------");
             
             //List에 담긴 온도 DB에 저장
