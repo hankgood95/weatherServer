@@ -16,7 +16,7 @@ public class MailService {
 		this.jms = jms;
 	}
 	
-	public void sendErrorMail() {
+	public void sendErrorMail(String message) {
 		ArrayList<String> toUserList  = new ArrayList<>();
 		
 		toUserList.add("hankgood958@gmail.com");
@@ -30,10 +30,10 @@ public class MailService {
 		smm.setTo((String[]) toUserList.toArray(new String[listSize]));
 		
 		//메일 제목 설정
-		smm.setSubject("Server Error Occur");
+		smm.setSubject("API connection error Occur");
 		
 		//메일 내용 설정
-		smm.setText("Server error has occur API call will be delayed 15 minute");
+		smm.setText(message);
 		
 		jms.send(smm);
 	}

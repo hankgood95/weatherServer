@@ -35,6 +35,5 @@ public class ShortWeatherApiTest {
 
 	@Test
 	public void apiTest() throws InterruptedException {
-		swc.callAPi();
 	}
 }

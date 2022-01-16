@@ -6,9 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
+import com.wook.error.ApiCallError;
 import com.wook.model.dto.ApiKey;
 import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
@@ -28,10 +32,6 @@ public class ShortWeatherController{
 	private TempService ts; //To save TempService
 	private MailService ms;
 	
-	private List<Temperature> temperList;
-	private List<ShortWeatherReq> swrList;
-	
-	
 	private Logger logger = LoggerFactory.getLogger(ShortWeatherController.class); //로그를 찍기 위해서 사용하는 Class
 	
 	@Autowired
@@ -43,13 +43,17 @@ public class ShortWeatherController{
 		this.ms = ms;
 	}
 	
-	@Scheduled(cron="0 9 19 * * *", zone = "Asia/Seoul")
-	public void callAPi() throws InterruptedException {
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 900000))
+	@Scheduled(cron="40 51 1 * * *", zone = "Asia/Seoul")
+	public void callAPi() throws InterruptedException, ApiCallError {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
 		//아니라면 나에게 메일을 보내는것을 만들 예정이다.
 		//그리고 위 과정을 테스트 코드를 통해서 검증을 해볼것이다.
 
+		List<Temperature> temperList;
+		List<ShortWeatherReq> swrList;
+		
         swrList = new ArrayList<>();
         List<GeoInfo> giList = gs.getGeoXY();
         
@@ -79,15 +83,16 @@ public class ShortWeatherController{
         
         temperList = sws.callSW(); // API 통신 Service 호출
         
-        
         //Confirming API call failure
         if(temperList.isEmpty()) { //온도 리스트가 비어있다면 진입
         	logger.warn("TemperList is empty");
         	//이제 여기서 메일을 보내주는 서비스를 만들어서 메일 전송을 해줘야 함
-        	ms.sendErrorMail();
+        	String emailMessage = "API connection failed";
+        	ms.sendErrorMail(emailMessage);
             logger.info("-------------------");
             logger.info("API Connection Fail");
             //이제 이걸 15분 뒤에 다시 호출하는 메소드를 만들어야 함
+            throw new ApiCallError("API call server side error");
             
         }else {
             logger.info("-------------------");
@@ -102,5 +107,11 @@ public class ShortWeatherController{
             
             logger.info("DB Store Success");
         }
-	}    
+	}
+	
+	@Recover
+	public void recoverApi(ApiCallError error){
+    	String emailMessage = "API connection failed please check your code";
+    	ms.sendErrorMail(emailMessage);
+	}
 }
