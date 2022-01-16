@@ -43,7 +43,7 @@ public class ShortWeatherController{
 		this.ms = ms;
 	}
 	
-	@Scheduled(cron="0 27 19 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 9 19 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
@@ -79,24 +79,29 @@ public class ShortWeatherController{
         
         temperList = sws.callSW(); // API 통신 Service 호출
         
-        if(temperList.isEmpty()) {
+        
+        //Confirming API call failure
+        if(temperList.isEmpty()) { //온도 리스트가 비어있다면 진입
         	logger.warn("TemperList is empty");
         	//이제 여기서 메일을 보내주는 서비스를 만들어서 메일 전송을 해줘야 함
-        	
+        	ms.sendErrorMail();
+            logger.info("-------------------");
+            
+            logger.info("API Connection Fail");
+        }else {
+            logger.info("-------------------");
+            
+            logger.info("API ConnectionSuccess");
+            
+            logger.info("-------------------");
+            
+            //List에 담긴 온도 DB에 저장
+            for(int i = 0;i<temperList.size();i++) {
+            	Temperature temp = temperList.get(i);
+            	ts.saveTemp(temp);
+            }
+            
+            logger.info("DB Store Success");
         }
-        
-        logger.info("-------------------");
-        
-        logger.info("API ConnectionSuccess");
-        
-        logger.info("-------------------");
-        
-        //List에 담긴 온도 DB에 저장
-        for(int i = 0;i<temperList.size();i++) {
-        	Temperature temp = temperList.get(i);
-        	ts.saveTemp(temp);
-        }
-        
-        logger.info("DB Store Success");
 	}    
 }
