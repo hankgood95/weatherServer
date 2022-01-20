@@ -44,7 +44,7 @@ public class ShortWeatherController{
 	}
 	
 	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
-	@Scheduled(cron="20 47 15 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="40 55 4 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException, ApiCallError {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
