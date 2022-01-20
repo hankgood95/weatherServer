@@ -1,0 +1,11 @@
+<!-- 이 파일은 로그를 어떻게 찍을지 설정하는 부분이다. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> <!-- 콘솔에 출력되는 형식을 지정 -->
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{36} - %msg%n</Pattern>
+			<!-- - %d{yyyyMMdd HH:mm:ss.SSS} : 시간, [%thread] : 로그를 찍은 Thread, %-5level: 로그레벨, %logger{0}:%line: 로그를 출력시킨 java 파일명와 line 
+			 %msg%n : 메시지와 줄바꿈-->
+		</layout>
+	</appender>
+</configuration>

@@ -62,7 +62,6 @@ public class ShortWeatherService {
 		
 		int count = 0;
 		int fifty = 50;
-		
 		while(count < swrListSize) { //count가 1668보다 작으면 진입
 			
 			int beforeCall = tl.size();
@@ -112,7 +111,8 @@ public class ShortWeatherService {
 			exs.shutdown();
 			cdl.await();
 			
-			if(exs.isShutdown()) {
+			//50번씩 반복을 하고 ExecutorService는 shutdown 되어 있고 오류때문에 List에 추가되지 못했다면 여기 진입
+			if(exs.isShutdown()&& tl.isEmpty()) {
 				logger.info("ExecutorService ShutDown");
 				break;
 			}

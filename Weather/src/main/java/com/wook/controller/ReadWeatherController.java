@@ -33,12 +33,14 @@ public class ReadWeatherController {
 		//1 . 401 응답코드 - 서비스키 오류
 		//2. 204 응답코드 - 데이터 없는 오류 - 완료
 		//3. 200 응답코드 - 성공 - 완료
-		
+		//4. 209 응답코드 - 이미 존재하는 데이터
 		//서비스 키를 어떻게 발급을 해줄것이냐 이게 관건이네 보니깐
 		
 		if(temp== null) { //해당 데이터로 받은 내용이 없다면
+			logger.error("No Data");
 			return new ApiResponse(204,"No Data",null); //204 응답코드를 보내준다.
 		}else {
+			logger.info("Success");
 			return new ApiResponse(200,"Success",temp);
 		}
 	}
