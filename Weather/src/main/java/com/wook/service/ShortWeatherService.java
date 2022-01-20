@@ -113,7 +113,7 @@ public class ShortWeatherService {
 			
 			//50번씩 반복을 하고 ExecutorService는 shutdown 되어 있고 오류때문에 List에 추가되지 못했다면 여기 진입
 			if(exs.isShutdown()&& tl.isEmpty()) {
-				logger.info("ExecutorService ShutDown");
+				logger.warn("ExecutorService ShutDown");
 				break;
 			}
 			//에러를 발생하면 현재 여기를 넘어오지 못하고 있음
