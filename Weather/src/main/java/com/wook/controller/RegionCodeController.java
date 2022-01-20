@@ -35,12 +35,15 @@ public class RegionCodeController {
 			result.setType(rc.getType());
 			
 			if(result!=null) {
+				logger.info("Success");
 				return new ApiResponse(200,"Success",result);
 			}else {
+				logger.error("No Data");
 				return new ApiResponse(204,"No Data",null);
 			}
 			
 		}else {
+			logger.error("Failed : Authorization Failed");
 			return new ApiResponse(401,"Authorization Failed : Wrong ServiceKey",null);
 		}
 	}

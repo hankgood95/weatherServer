@@ -43,8 +43,8 @@ public class ShortWeatherController{
 		this.ms = ms;
 	}
 	
-	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 900000))
-	@Scheduled(cron="0 30 23 * * *", zone = "Asia/Seoul")
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
+	@Scheduled(cron="20 47 15 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException, ApiCallError {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
@@ -90,8 +90,9 @@ public class ShortWeatherController{
         	String emailMessage = "API connection failed";
         	ms.sendErrorMail(emailMessage);
             logger.info("-------------------");
-            logger.info("API Connection Fail");
+            logger.error("API Connection Fail");
             //이제 이걸 15분 뒤에 다시 호출하는 메소드를 만들어야 함
+            logger.info("retrey");
             throw new ApiCallError("API call server side error");
             
         }else {
@@ -111,6 +112,7 @@ public class ShortWeatherController{
 	
 	@Recover
 	public void recoverApi(ApiCallError error){
+		logger.error("API connection failed no more retry");
     	String emailMessage = "API connection failed please check your code";
     	ms.sendErrorMail(emailMessage);
 	}
