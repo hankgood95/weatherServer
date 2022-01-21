@@ -68,7 +68,7 @@ public class MemberController {
 				logger.error("No Data");
 				return new ApiResponse(204,"Failed : No Data",result);
 			}else {
-				return new ApiResponse(200,"Failed : No Data",result);
+				return new ApiResponse(200,"Success",result);
 			}
 		}
 	}
