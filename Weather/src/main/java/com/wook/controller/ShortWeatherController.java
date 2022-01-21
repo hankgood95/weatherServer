@@ -44,7 +44,7 @@ public class ShortWeatherController{
 	}
 	
 	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
-	@Scheduled(cron="0 35 19 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 47 2 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException, ApiCallError {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
@@ -84,7 +84,7 @@ public class ShortWeatherController{
         temperList = sws.callSW(); // API 통신 Service 호출
         
         //Confirming API call failure
-        if(temperList.isEmpty()) { //온도 리스트가 비어있다면 진입
+        if(temperList.isEmpty() || temperList.size()<swrList.size()) { //온도 리스트가 비어있다면 진입
         	logger.warn("TemperList is empty");
         	//이제 여기서 메일을 보내주는 서비스를 만들어서 메일 전송을 해줘야 함
         	String emailMessage = "API connection failed";
