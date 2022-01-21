@@ -1,7 +1,5 @@
 package com.wook.service;
 
-import static org.junit.Assert.assertThrows;
-
 import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +8,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import com.wook.controller.ShortWeatherController;
+import com.wook.error.ApiCallError;
 import com.wook.model.dao.ShortWeatherDao;
 import com.wook.model.dto.GeoInfo;
 import com.wook.model.dto.ShortWeatherReq;
@@ -27,15 +29,18 @@ public class ShortWeatherService {
 	//여기서는 이제 ShortWeatherDao Thread를 Thread Pool을 이용해서 500개의 Thread를 만들어 API를 호출할 예정
 	
 	private ShortWeatherDao swd;
+	private MailService ms;
+	
 	private List<ShortWeatherReq> swrList;
 	private List<GeoInfo> geoList;
 	
 	private Logger logger = (Logger) LoggerFactory.getLogger(ShortWeatherController.class);
 	
-	
-	public ShortWeatherService(ShortWeatherDao swd) {
+	@Autowired
+	public ShortWeatherService(ShortWeatherDao swd, MailService ms) {
 		super();
 		this.swd = swd;
+		this.ms = ms;
 	}
 	
 	public List<ShortWeatherReq> getSwr() {
@@ -54,7 +59,8 @@ public class ShortWeatherService {
 	}
 
 	//여기서 이제 전달받은 GeoInfo List를 가지고 API를 호출하는 부분
-	public List<Temperature> callSW() throws InterruptedException {
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
+	public List<Temperature> callSW() throws InterruptedException, ApiCallError {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
 		logger.info(String.valueOf(swrListSize));
@@ -66,13 +72,13 @@ public class ShortWeatherService {
 			
 			int beforeCall = tl.size();
 			
-			int fPlus = count+50; //세고 있는 숫자의 수를 50씩 늘리는거임
+			int fPlus = count+50; //세고 있는 숫자의 수를 50씩 늘리는거임 그래야 fPlus까지를 반복
 			
-			if(fPlus > swrListSize) { //만약 50더한게 List 사이즈보다 크면 진입
+			if(fPlus > swrListSize) { //만약 50더한게 List 사이즈보다 크면 진입 fPlus의 수를 swrListSize로 수정
 				fPlus = swrListSize;
 			}
 			
-			if(fifty > swrListSize - tl.size()) { //만약 50이 현재 남아있는 데이터보다 크다면 진입해서 현재 남아있는 데이터수로 바꿔줌
+			if(fifty > swrListSize - tl.size()) { //남아 있는 request 의 수가 50보다 작으면 fifty를 줄임
 				fifty = swrListSize - tl.size();
 			}
 			
@@ -111,16 +117,16 @@ public class ShortWeatherService {
 			exs.shutdown();
 			cdl.await();
 			
-			//50번씩 반복을 하고 ExecutorService는 shutdown 되어 있고 오류때문에 List에 추가되지 못했다면 여기 진입
-			if(exs.isShutdown()&& tl.isEmpty()) {
+			//아예 실패되어 아무것도 담지 못했거나 가져와야되는 숫자만큼 가져오질 못할때 진입
+			if((exs.isShutdown() && tl.isEmpty()) || tl.size()<fPlus) {
 				logger.warn("ExecutorService ShutDown");
-				break;
+				throw new ApiCallError("API call server side error");
 			}
 			//에러를 발생하면 현재 여기를 넘어오지 못하고 있음
 			
-			int afterCall = tl.size();
-			int differ = afterCall - beforeCall;
-			count = count + differ;
+			int afterCall = tl.size(); //호출하고 났을때의 size 
+			int differ = afterCall - beforeCall; //몇 차이나는지 호출이랑 호출하기전이랑 계산.
+			count = count + differ; //시작점을 바꿈
 			logger.info("Success API : "+String.valueOf(tl.size()));
 			
 			logger.info("-------------------");
@@ -131,5 +137,14 @@ public class ShortWeatherService {
 		logger.info(String.valueOf(tl.size()));
 		
 		return tl;
+	}
+	
+	@Recover
+	public List<Temperature> recoverApi(ApiCallError error){
+		logger.error("API connection failed no more retry");
+    	String emailMessage = "API connection failed please check your code";
+    	ms.sendErrorMail(emailMessage);
+    	
+    	return null;
 	}
 }
