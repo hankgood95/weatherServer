@@ -32,9 +32,9 @@ public class RegionCodeController {
 		if(ms.checkServiceKey(serviceKey) > 0) { //서비스키가 유효한 서비스키라면 진입
 			//여기서 이제 해당 주소로 regioncode를 받아야 된다.
 			RegionCode result = rcs.getRegionCode(rc); //주어진 request로 DB에서 찾아본다.
-			result.setType(rc.getType()); //type이 정해져 있지 않으니 요청으로 받은걸로 타입을 지정한다.
 			
 			if(result != null) {
+				result.setType(rc.getType());//type이 정해져 있지 않으니 요청으로 받은걸로 타입을 지정한다.
 				logger.info("Success");
 				return new ApiResponse(200,"Success",result);
 			}else {
