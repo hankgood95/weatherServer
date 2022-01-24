@@ -59,7 +59,7 @@ public class ShortWeatherService {
 	}
 
 	//여기서 이제 전달받은 GeoInfo List를 가지고 API를 호출하는 부분
-	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 300000))
 	public List<Temperature> callSW() throws InterruptedException, ApiCallError {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
