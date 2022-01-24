@@ -122,6 +122,7 @@ public class ShortWeatherDao implements Runnable{
 	            	cdl.countDown(); //Thread 수를 센다.
 	        	}else {
 	        		logger.error("http reqeust has failed");
+	        		callBack.failed(null, null);
 	        	}        		
         	}
 
