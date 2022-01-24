@@ -59,7 +59,7 @@ public class ShortWeatherService {
 	}
 
 	//여기서 이제 전달받은 GeoInfo List를 가지고 API를 호출하는 부분
-	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 300000))
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 60000))
 	public List<Temperature> callSW() throws InterruptedException, ApiCallError {
 		// TODO Auto-generated method stub
 		int swrListSize = swrList.size();
@@ -103,6 +103,8 @@ public class ShortWeatherService {
 							logger.error("Api called failed.");
 							//이제 여기서 메일을 보내야함
 							exs.shutdownNow();
+							logger.error("ExecutorService shut down now");
+							
 							cdl.countDown();
 						}
 				
@@ -118,8 +120,9 @@ public class ShortWeatherService {
 			cdl.await();
 			
 			//아예 실패되어 아무것도 담지 못했거나 가져와야되는 숫자만큼 가져오질 못할때 진입
-			if((exs.isShutdown() && tl.isEmpty()) || tl.size()<fPlus) {
-				logger.warn("ExecutorService ShutDown");
+			if((exs.isShutdown() && tl.isEmpty()) || tl.size() < fPlus) {
+				logger.warn("ExecutorService is shut down");
+				ms.sendErrorMail("API call server side error. \n We will retry calling api.");
 				throw new ApiCallError("API call server side error");
 			}
 			//에러를 발생하면 현재 여기를 넘어오지 못하고 있음
