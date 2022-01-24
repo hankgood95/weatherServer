@@ -123,6 +123,7 @@ public class ShortWeatherService {
 			if((exs.isShutdown() && tl.isEmpty()) || tl.size() < fPlus) {
 				logger.warn("ExecutorService is shut down");
 				ms.sendErrorMail("API call server side error. \n We will retry calling api.");
+				//1분뒤 retry
 				throw new ApiCallError("API call server side error");
 			}
 			//에러를 발생하면 현재 여기를 넘어오지 못하고 있음
