@@ -19,7 +19,7 @@ public class MailService {
 	public void sendErrorMail(String message) {
 		ArrayList<String> toUserList  = new ArrayList<>();
 		
-		toUserList.add("hankgood958@gmail.com");
+		toUserList.add("hankgood958@gmail.com"); //메일 보낼 상대방들을 List에 담는다
 		toUserList.add("hankgood95@naver.com");
 		
 		int listSize = toUserList.size();
