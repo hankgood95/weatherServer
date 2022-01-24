@@ -69,6 +69,7 @@
 		    <artifactId>commons-codec</artifactId>
 		    <version>1.10</version>
 		</dependency>
+		
 		<!-- mail 전송 서비스를 위한 dependency -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
