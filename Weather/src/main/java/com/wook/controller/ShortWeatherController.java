@@ -43,7 +43,7 @@ public class ShortWeatherController{
 		this.ms = ms;
 	}
 	
-	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 2000))
+	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 300000))
 	@Scheduled(cron="0 30 23 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException, ApiCallError {
 		
