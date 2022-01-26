@@ -44,7 +44,7 @@ public class ShortWeatherController{
 	}
 	
 	@Retryable(value = {ApiCallError.class},maxAttempts = 3, backoff= @Backoff(delay = 900000))
-	@Scheduled(cron="0 35 6 * * *", zone = "Asia/Seoul")
+	@Scheduled(cron="0 30 0 * * *", zone = "Asia/Seoul")
 	public void callAPi() throws InterruptedException, ApiCallError {
 		
 		//내가 여기서 만들것은 이제 API 연결이 되지 않았을때 50건 이하라면 다시 시도해보고
@@ -71,6 +71,16 @@ public class ShortWeatherController{
         for(GeoInfo gi : giList) {
         	
         	ShortWeatherReq swr = new ShortWeatherReq(APK.getApiKey(),"2",gi.getX(),gi.getY());
+        	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
+        	swr.setNx(gi.getX()); //x좌표값 저장
+        	swr.setNy(gi.getY()); //y좌표값 저장
+        	
+        	swrList.add(swr); //list에 swr 추가
+        }
+        
+        for(GeoInfo gi : giList) {
+        	
+        	ShortWeatherReq swr = new ShortWeatherReq(APK.getApiKey(),"3",gi.getX(),gi.getY());
         	swr.setBaseDate(); //현재 날짜로 baseDate를 설정하는 메소드를 호출
         	swr.setNx(gi.getX()); //x좌표값 저장
         	swr.setNy(gi.getY()); //y좌표값 저장
