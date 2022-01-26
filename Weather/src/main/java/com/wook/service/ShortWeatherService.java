@@ -122,7 +122,7 @@ public class ShortWeatherService {
 			//아예 실패되어 아무것도 담지 못했거나 가져와야되는 숫자만큼 가져오질 못할때 진입
 			if((exs.isShutdown() && tl.isEmpty()) || tl.size() < fPlus) {
 				logger.warn("ExecutorService is shut down");
-				ms.sendErrorMail("API call server side error. \n We will retry calling api.");
+				ms.sendErrorMail("API call server side error. \n We will retry calling api after 15 minute.");
 				//1분뒤 retry
 				throw new ApiCallError("API call server side error");
 			}
